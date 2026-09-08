@@ -992,15 +992,14 @@ export default function WheelsSkinsApp() {
                         <Calendar className="w-3.5 h-3.5" />
                       </span>
 
-                      {/* حقل الإدخال الأصلي المخبأ برمجياً ويعمل عند الضغط في أي مكان */}
-                      <input 
+                      {/* حقل الإدخال الأصلي المخبأ برمجياً ويعمل عند الضغط في أي مكان مع دعم الوضع الليلي للهواتف */}
+                      <input
                         ref={dateInputRef}
                         type="date"
-                        required
-                        min={todayStr}
                         value={appointmentDate}
+                        min={todayStr}
                         onChange={(e) => setAppointmentDate(e.target.value)}
-                        className="absolute inset-0 opacity-0 pointer-events-none w-full h-full"
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer [color-scheme:dark]"
                       />
                     </div>
                   </div>
@@ -1014,7 +1013,7 @@ export default function WheelsSkinsApp() {
                       <select
                         value={appointmentTime}
                         onChange={(e) => setAppointmentTime(e.target.value)}
-                        className="w-full bg-zinc-900 border-2 border-zinc-700 hover:border-[#E3211C] rounded-xl p-3.5 text-xs text-white font-bold outline-none focus:border-[#E3211C] transition cursor-pointer"
+                        className="w-full bg-zinc-900 border-2 border-zinc-700 hover:border-[#E3211C] rounded-xl p-3.5 text-xs text-white font-bold outline-none focus:border-[#E3211C] transition cursor-pointer [color-scheme:dark]"
                       >
                         {TIME_SLOTS.map((slot) => (
                           <option key={slot} value={slot}>{slot}</option>
@@ -1231,7 +1230,7 @@ export default function WheelsSkinsApp() {
 
       {/* 6. الفوتر */}
       <footer className="py-8 border-t border-zinc-900 text-center text-xs text-zinc-500">
-        © {new Date().getFullYear()} WheelSkins. جميع الحقوق محفوظة.
+        ©️ {new Date().getFullYear()} WheelSkins. جميع الحقوق محفوظة.
       </footer>
 
       {/* 7. نافذة تكبير أي صورة */}
