@@ -189,7 +189,7 @@ export default function WheelsSkinsApp() {
     const gearText = selectedGear === 'dotted' ? 'مقبض فتيس منقط (+250 ج.م)' : (selectedGear === 'plain' ? 'مقبض فتيس سادة (+250 ج.م)' : 'بدون فتيس');
     const handbrakeText = selectedHandbrake === 'handbrake' ? 'كسوة هاند بريك (+150 ج.م)' : 'بدون هاند بريك';
 
-    const message = `*طلب حجز موعد جديد - WheelSkins*%0A` +
+    const message = `*طلب حجز موعد جديد - WheelsSkins*%0A` +
       `--------------------------------%0A` +
       `*الفرع المختار:* ${encodeURIComponent(selectedBranch)}%0A` +
       `*تاريخ الميعاد:* ${encodeURIComponent(appointmentDate)}%0A` +
@@ -951,7 +951,7 @@ export default function WheelsSkinsApp() {
 
       {/* 6. الفوتر */}
       <footer className="py-8 border-t border-zinc-900 text-center text-xs text-zinc-500">
-        ©️ {new Date().getFullYear()} WheelSkins. جميع الحقوق محفوظة.
+        ©️ {new Date().getFullYear()} WheelsSkins. جميع الحقوق محفوظة.By Maestro Omar Fox
       </footer>
 
       {/* 7. نافذة تكبير أي صورة */}
