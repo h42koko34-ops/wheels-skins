@@ -222,7 +222,7 @@ export default function WheelsSkinsApp() {
             <div className="text-white font-bold text-lg tracking-wider flex items-center gap-1">
               WheelSkins <span className="text-[#E3211C] font-black">/</span>
             </div>
-            <div className="text-xs text-zinc-400 font-medium">ويلز اسكنز</div>
+            <div className="text-xs text-zinc-400 font-medium">Wheels Skins</div>
           </div>
         </div>
 
@@ -293,7 +293,7 @@ export default function WheelsSkinsApp() {
             Handcrafted Steering Wheel Wraps
           </span>
           <h1 className="text-3xl sm:text-5xl font-black text-white mb-4 leading-tight">
-            ويلز اسكنز: فن كسوة الطارة الهاند ميد
+             Wheels Skins: Handmade wheel covering art    
           </h1>
           <p className="text-zinc-300 text-sm sm:text-base mb-6 max-w-2xl">
             صمّم طارتك الفاخرة بنفسك وشاهد شكل الفتيس والهاند بريك بأعلى جودة تفصيل يدوي
