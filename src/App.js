@@ -366,7 +366,7 @@ export default function WheelsSkinsApp() {
       {/* 3. سكشن محاكي التخصيص */}
       <section id="configurator" className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">صمّم طارتك وشاهد إضافاتك</h2>
+          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">Design your steering wheel and check out the gear shifter and handbrake accessories.</h2>
           <p className="text-zinc-400 text-sm sm:text-base">اختر الطارة ثم حدد مقبض الفتيس أو الهاند بريك وسيظهر شكل كل قطعة فوراً</p>
         </div>
 
@@ -605,7 +605,7 @@ export default function WheelsSkinsApp() {
       {/* 4. سكشن الفروع */}
       <section id="branches" className="py-16 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">فروعنا واللوكيشن</h2>
+          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">Branches and Locations</h2>
           <p className="text-zinc-400 text-sm">اضغط على أي فرع لفتح موقعه المباشر على Google Maps</p>
         </div>
 
@@ -644,7 +644,7 @@ export default function WheelsSkinsApp() {
 
       {/* 5. سكشن الحجز */}
       <section id="booking" className="py-16 px-6 max-w-3xl mx-auto border-t border-zinc-900 text-center">
-        <h2 className="text-2xl sm:text-3xl font-black mb-3">احجز موعدك الآن</h2>
+        <h2 className="text-2xl sm:text-3xl font-black mb-3">Book your appointment now.</h2>
         <p className="text-zinc-400 text-sm mb-8">اختر الفرع، وحدد الميعاد المناسب وسيتم نقلك مباشرة لتأكيد حجزك عبر واتساب</p>
 
         <form className="space-y-6 text-right bg-zinc-950 p-6 sm:p-8 rounded-2xl border border-zinc-800" onSubmit={handleBookingSubmit}>
@@ -949,12 +949,11 @@ export default function WheelsSkinsApp() {
         </form>
       </section>
 
-      {/* 6. الفوتر */}
+    {/* 6. الفوتر */}
       <footer className="py-8 border-t border-zinc-900 text-center text-xs text-zinc-500">
-        ©️ {new Date().getFullYear()} WheelsSkins. جميع الحقوق محفوظة.By Maestro Omar Fox
-      </footer>
-
-      {/* 7. نافذة تكبير أي صورة */}
+        ©️ {new Date().getFullYear()} WheelSkins. جميع الحقوق محفوظة. By Maestro
+      </footer> {/* 7. نافذة تكبير أي صورة */}
+      
       {modalImage && (
         <div 
           className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in duration-200"
