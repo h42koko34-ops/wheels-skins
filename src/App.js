@@ -227,11 +227,11 @@ export default function WheelsSkinsApp() {
         </div>
 
         <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-300">
-          <a href="#hero" className="text-[#E3211C] font-bold transition">الرئيسية</a>
-          <a href="#pricing" className="hover:text-white transition">قائمة الأسعار</a>
-          <a href="#configurator" className="hover:text-white transition">صمّم طارتك</a>
-          <a href="#branches" className="hover:text-white transition">فروعنا واللوكيشن</a>
-          <a href="#booking" className="hover:text-white transition">احجز موعدك</a>
+          <a href="#hero" className="text-[#E3211C] font-bold transition">home</a>
+          <a href="#pricing" className="hover:text-white transition">Price list</a>
+          <a href="#configurator" className="hover:text-white transition">Design your flyer</a>
+          <a href="#branches" className="hover:text-white transition">Our branches and location</a>
+          <a href="#booking" className="hover:text-white transition">Book your appointment</a>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
@@ -358,7 +358,7 @@ export default function WheelsSkinsApp() {
             href="#configurator" 
             className="inline-block bg-[#b8860b] hover:bg-[#996f08] text-white font-bold px-8 py-3 rounded-lg shadow-lg transition transform hover:scale-105 mt-2"
           >
-            اصنع تصميمك الخاص الآن
+           Make your design now 
           </a>
         </div>
       </section>
