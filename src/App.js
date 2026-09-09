@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 
 // استدعاء قاعدة بيانات السيارات من الملف المستقل
-import { CAR_DATABASE } from './carData';
+import { CAR_DATABASE } from './carDate';
 
 // استدعاء اللوجو وخلفية الهيدر
 import logo from './logo.png';
