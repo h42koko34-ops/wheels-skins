@@ -951,7 +951,7 @@ export default function WheelsSkinsApp() {
 
     {/* 6. الفوتر */}
       <footer className="py-8 border-t border-zinc-900 text-center text-xs text-zinc-500">
-        ©️ {new Date().getFullYear()} WheelSkins. جميع الحقوق محفوظة. By Maestro
+        ©️ {new Date().getFullYear()} WheelSkins. جميع الحقوق محفوظة. By Maestro omar fox 
       </footer> {/* 7. نافذة تكبير أي صورة */}
       
       {modalImage && (
