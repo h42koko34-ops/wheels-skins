@@ -4,6 +4,9 @@ import {
   Search, Check, ExternalLink, Clock, ShieldCheck, CalendarDays
 } from 'lucide-react';
 
+// استدعاء قاعدة بيانات السيارات من الملف المستقل
+import { CAR_DATABASE } from './carsData';
+
 // استدعاء اللوجو وخلفية الهيدر
 import logo from './logo.png';
 import heroBg from './hero-bg.jpg';
@@ -70,11 +73,93 @@ const TIME_SLOTS = [
   '10:00 م'
 ];
 
-// قاعدة بيانات ماركات وموديلات السيارات
-import { CAR_DATABASE } from './carsData';
-const [selectedBrand, modelSearch] = useState('');
+export default function WheelsSkinsApp() {
+  const wheelOptions = [
+    { id: 'plain', name: 'طارة: جلد سادة', price: 400, priceText: '400 ج.م', image: wheelPlain },
+    { id: 'dotted', name: 'طارة: جلد منقط', price: 400, priceText: '400 ج.م', image: wheelDotted },
+    { id: 'carbon', name: 'طارة: جلد كاربون', price: 400, priceText: '400 ج.م', image: wheelCarbon },
+    { id: 'forged', name: 'طارة: جلد فورجيد', price: 400, priceText: '400 ج.م', image: wheelForged },
+    { id: 'alcantara', name: 'طارة: جلد الكنتارا', price: 450, priceText: '450 ج.م', note: 'بدون ضمان', image: wheelAlcantara },
+    { id: 'carbon_plain', name: 'ميكس: (كاربون + سادة)', price: 400, priceText: '400 ج.م', image: wheelCarbonPlain },
+    { id: 'plain_dotted', name: 'ميكس: (سادة + منقط)', price: 400, priceText: '400 ج.م', image: wheelPlainDotted },
+    { id: 'carbon_alcantara', name: 'ميكس: (كاربون + الكنتارا)', price: 450, priceText: '450 ج.م', image: wheelCarbonAlcantara },
+    { id: 'carbon_dotted', name: 'ميكس: (كاربون + منقط)', price: 400, priceText: '400 ج.م', image: wheelCarbonDotted },
+    { id: 'alcantara_dotted', name: 'ميكس: (الكنتارا + منقط)', price: 450, priceText: '450 ج.م', image: wheelAlcantaraDotted },
+    { id: 'alcantara_forged', name: 'ميكس: (الكنتارا + فورجيد)', price: 450, priceText: '450 ج.م', image: wheelAlcantaraForged },
+    { id: 'forged_plain', name: 'ميكس: (فورجيد + سادة)', price: 400, priceText: '400 ج.م', image: wheelForgedPlain },
+    { id: 'forged_dotted', name: 'ميكس: (فورجيد + منقط)', price: 400, priceText: '400 ج.م', image: wheelForgedDotted },
+  ];
 
-  // دالة فتح تقويم التاريخ فور الضغط على البوكس
+  const threadColors = [
+    { name: 'أحمر', hex: '#E3211C' },
+    { name: 'أزرق', hex: '#1D4ED8' },
+    { name: 'أسود', hex: '#18181B' },
+    { name: 'بيج', hex: '#D4B996' },
+    { name: 'لبني', hex: '#38BDF8' },
+    { name: 'أصفر', hex: '#EAB308' },
+    { name: 'أخضر', hex: '#16A34A' },
+    { name: 'رمادي', hex: '#9CA3AF' },
+    { name: 'بني', hex: '#78350F' }
+  ];
+
+  const [selectedWheel, setSelectedWheel] = useState(wheelOptions[0]);
+  const [selectedThread, setSelectedThread] = useState(threadColors[0]);
+  
+  const [selectedGear, setSelectedGear] = useState('none');
+  const [selectedHandbrake, setSelectedHandbrake] = useState('none');
+
+  const totalPrice = useMemo(() => {
+    let sum = selectedWheel.price;
+    if (selectedGear === 'dotted' || selectedGear === 'plain') sum += 250;
+    if (selectedHandbrake === 'handbrake') sum += 150;
+    return sum;
+  }, [selectedWheel, selectedGear, selectedHandbrake]);
+
+  const [modalImage, setModalImage] = useState(null);
+
+  const dateInputRef = useRef(null);
+
+  const todayStr = useMemo(() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }, []);
+
+  const [selectedBranch, setSelectedBranch] = useState(null);
+  const [appointmentDate, setAppointmentDate] = useState(todayStr);
+  const [appointmentTime, setAppointmentTime] = useState(TIME_SLOTS[0]);
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+
+  const [brandSearch, setBrandSearch] = useState('');
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [isBrandDropdownOpen, setIsBrandDropdownOpen] = useState(false);
+
+  const [modelSearch, setModelSearch] = useState('');
+  const [selectedModel, setSelectedModel] = useState('');
+  const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
+  const [customModelInput, setCustomModelInput] = useState('');
+
+  const filteredBrands = useMemo(() => {
+    if (!CAR_DATABASE) return [];
+    if (!brandSearch.trim()) return CAR_DATABASE;
+    return CAR_DATABASE.filter(c => 
+      c.brand.toLowerCase().includes(brandSearch.toLowerCase())
+    );
+  }, [brandSearch]);
+
+  const currentBrandModels = useMemo(() => {
+    if (!selectedBrand || !CAR_DATABASE) return [];
+    const brandData = CAR_DATABASE.find(b => b.brand === selectedBrand);
+    if (!brandData) return [];
+    if (!modelSearch.trim()) return brandData.models;
+    return brandData.models.filter(m => 
+      m.toLowerCase().includes(modelSearch.toLowerCase())
+    );
+  }, [selectedBrand, modelSearch]);
+
   const triggerDatePicker = () => {
     if (dateInputRef.current) {
       if (typeof dateInputRef.current.showPicker === 'function') {
@@ -127,7 +212,7 @@ const [selectedBrand, modelSearch] = useState('');
   return (
     <div className="min-h-screen bg-[#0B0B0B] text-white font-['Cairo'] antialiased selection:bg-[#E3211C] selection:text-white" dir="rtl">
       
-      {/* 1. القائمة العلوية مع أيقونات السوشيال ميديا الملونة الرسمية */}
+      {/* 1. القائمة العلوية */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-black/75 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded overflow-hidden flex items-center justify-center bg-black border border-zinc-800">
@@ -142,7 +227,7 @@ const [selectedBrand, modelSearch] = useState('');
         </div>
 
         <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-300">
-          <a href="#hero" className="text-[#E3211C] font-bold transition">الرئيسيه</a>
+          <a href="#hero" className="text-[#E3211C] font-bold transition">الرئيسية</a>
           <a href="#pricing" className="hover:text-white transition">قائمة الأسعار</a>
           <a href="#configurator" className="hover:text-white transition">صمّم طارتك</a>
           <a href="#branches" className="hover:text-white transition">فروعنا واللوكيشن</a>
@@ -195,7 +280,7 @@ const [selectedBrand, modelSearch] = useState('');
         </div>
       </nav>
 
-      {/* 2. سكشن الهيرو والأسعار مع عبارة (ضمان سنة على الخامة والتركيب) */}
+      {/* 2. سكشن الهيرو والأسعار */}
       <section 
         id="hero" 
         className="relative min-h-screen pt-28 pb-16 flex flex-col items-center justify-center text-center px-4 bg-cover bg-center bg-no-repeat"
@@ -208,7 +293,7 @@ const [selectedBrand, modelSearch] = useState('');
             Handcrafted Steering Wheel Wraps
           </span>
           <h1 className="text-3xl sm:text-5xl font-black text-white mb-4 leading-tight">
-            ويلز اسكنز: فن كسوة الطاره الهاند ميد
+            ويلز اسكنز: فن كسوة الطارة الهاند ميد
           </h1>
           <p className="text-zinc-300 text-sm sm:text-base mb-6 max-w-2xl">
             صمّم طارتك الفاخرة بنفسك وشاهد شكل الفتيس والهاند بريك بأعلى جودة تفصيل يدوي
@@ -517,7 +602,7 @@ const [selectedBrand, modelSearch] = useState('');
         </div>
       </section>
 
-      {/* 4. سكشن الفروع مع روابط اللوكيشن */}
+      {/* 4. سكشن الفروع */}
       <section id="branches" className="py-16 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
           <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">فروعنا واللوكيشن</h2>
@@ -557,7 +642,7 @@ const [selectedBrand, modelSearch] = useState('');
         </div>
       </section>
 
-      {/* 5. سكشن حجز الموعد مع بوكس التاريخ التفاعلي الواضح */}
+      {/* 5. سكشن الحجز */}
       <section id="booking" className="py-16 px-6 max-w-3xl mx-auto border-t border-zinc-900 text-center">
         <h2 className="text-2xl sm:text-3xl font-black mb-3">احجز موعدك الآن</h2>
         <p className="text-zinc-400 text-sm mb-8">اختر الفرع، وحدد الميعاد المناسب وسيتم نقلك مباشرة لتأكيد حجزك عبر واتساب</p>
@@ -588,7 +673,6 @@ const [selectedBrand, modelSearch] = useState('');
               ))}
             </div>
 
-            {/* بوكس التاريخ التفاعلي الواضح جداً */}
             {selectedBranch && (
               <div className="mt-4 p-4 bg-zinc-950 border border-zinc-800 rounded-xl space-y-4 animate-in fade-in duration-300">
                 
@@ -603,8 +687,6 @@ const [selectedBrand, modelSearch] = useState('');
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  
-                  {/* بوكس التاريخ الكامل (قابل للضغط بالكامل لفتح التقويم) */}
                   <div>
                     <label className="block text-[11px] text-zinc-300 mb-1.5 font-semibold">
                       تاريخ يوم التركيب (اضغط لتغييره):
@@ -628,13 +710,11 @@ const [selectedBrand, modelSearch] = useState('');
                         </div>
                       </div>
 
-                      {/* زر تغيير اليوم الواضح جداً */}
                       <span className="text-[11px] font-bold text-white bg-[#E3211C] group-hover:bg-red-700 px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1">
                         <span>تغيير اليوم</span>
                         <Calendar className="w-3.5 h-3.5" />
                       </span>
 
-                      {/* حقل الإدخال الأصلي المخبأ برمجياً ويعمل عند الضغط في أي مكان مع دعم الوضع الليلي للهواتف */}
                       <input
                         ref={dateInputRef}
                         type="date"
@@ -646,7 +726,6 @@ const [selectedBrand, modelSearch] = useState('');
                     </div>
                   </div>
 
-                  {/* بوكس اختيار الساعة */}
                   <div>
                     <label className="block text-[11px] text-zinc-300 mb-1.5 font-semibold">
                       الساعة المناسبة (كل نصف ساعة) *
@@ -907,3 +986,4 @@ const [selectedBrand, modelSearch] = useState('');
 
     </div>
   );
+}
