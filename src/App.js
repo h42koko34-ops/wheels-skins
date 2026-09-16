@@ -279,90 +279,52 @@ export default function WheelsSkinsApp() {
           </a>
         </div>
       </nav>
+{/* 2. سكشن الهيرو بالفيديو مع اسم وشعار المشروع فقط */}
+      <section id="hero" className="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
+        {/* خلفية الفيديو التلقائي */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={heroBg}
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
 
-      {/* 2. سكشن الهيرو والأسعار */}
-      <section 
-        id="hero" 
-        className="relative min-h-screen pt-28 pb-16 flex flex-col items-center justify-center text-center px-4 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroBg})` }}
-      >
-        <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px]"></div>
+        {/* طبقة تظليل سينمائية */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-[#0B0B0B] z-10" />
 
-        <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center">
-          <span className="text-[#E3211C] font-bold tracking-widest text-xs uppercase mb-3 px-3 py-1 bg-black/60 rounded-full border border-zinc-800">
+        {/* محتوى الهيرو: البراند فقط */}
+        <div className="relative z-20 max-w-4xl mx-auto px-4 flex flex-col items-center">
+          <span className="text-[#E3211C] font-bold tracking-widest text-xs sm:text-sm uppercase mb-4 px-4 py-1.5 bg-black/60 rounded-full border border-red-500/30 backdrop-blur-md">
             Handcrafted Steering Wheel Wraps
           </span>
-          <h1 className="text-3xl sm:text-5xl font-black text-white mb-4 leading-tight">
-             Wheels Skins: Handmade wheel covering art    
+          <h1 className="text-4xl sm:text-7xl font-black text-white mb-4 tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+            Wheels <span className="text-[#E3211C]">Skins</span>
           </h1>
-          <p className="text-zinc-300 text-sm sm:text-base mb-6 max-w-2xl">
-            صمّم طارتك الفاخرة بنفسك وشاهد شكل الفتيس والهاند بريك بأعلى جودة تفصيل يدوي
+          <p className="text-zinc-300 text-sm sm:text-xl mb-8 max-w-2xl font-light drop-shadow-md">
+            فن وحرفة كسوة الطارة والفتيس بأعلى معايير الجلود والدرزات الرياضية الفاخرة
           </p>
 
-          <div id="pricing" className="grid grid-cols-2 lg:grid-cols-4 gap-3 w-full max-w-4xl my-6">
-            <div className="bg-zinc-900/90 border border-zinc-700/80 rounded-xl p-3 sm:p-4 text-center backdrop-blur-md shadow-lg flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] text-zinc-400 font-semibold block mb-1">كسوة الطارة والميكس</span>
-                <p className="text-xs text-zinc-300 mb-1">(سادة - منقط - كاربون - فورجيد)</p>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-lg sm:text-2xl font-black text-[#E3211C]">400 ج.م</span>
-                  <span className="text-xs text-zinc-500 line-through">450 ج.م</span>
-                </div>
-              </div>
-              <div className="mt-2 pt-2 border-t border-zinc-800 text-[11px] text-emerald-400 font-bold flex items-center justify-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 inline" /> ضمان سنة على الخامة والتركيب
-              </div>
-            </div>
-
-            <div className="bg-zinc-900/90 border border-amber-500/40 rounded-xl p-3 sm:p-4 text-center backdrop-blur-md shadow-lg flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] text-zinc-400 font-semibold block mb-1">كسوة ألكنتارا</span>
-                <p className="text-xs text-zinc-300 mb-1">خامة أصلية فاخرة</p>
-                <div className="text-lg sm:text-2xl font-black text-white">450 ج.م</div>
-              </div>
-              <div className="mt-2 pt-2 border-t border-zinc-800 text-[10px] text-amber-400 font-bold flex items-center justify-center gap-1">
-                <AlertTriangle className="w-3 h-3 inline" /> لا يوجد ضمان للألكنتارا
-              </div>
-            </div>
-
-            <div className="bg-zinc-900/90 border border-zinc-700/80 rounded-xl p-3 sm:p-4 text-center backdrop-blur-md shadow-lg flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] text-zinc-400 font-semibold block mb-1">مقبض الفتيس</span>
-                <p className="text-xs text-zinc-300 mb-1">(سادة أو منقط)</p>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-lg sm:text-2xl font-black text-[#E3211C]">250 ج.م</span>
-                  <span className="text-xs text-zinc-500 line-through">300 ج.م</span>
-                </div>
-              </div>
-              <div className="mt-2 pt-2 border-t border-zinc-800 text-[11px] text-emerald-400 font-bold flex items-center justify-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 inline" /> ضمان سنة على الخامة والتركيب
-              </div>
-            </div>
-
-            <div className="bg-zinc-900/90 border border-zinc-700/80 rounded-xl p-3 sm:p-4 text-center backdrop-blur-md shadow-lg flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] text-zinc-400 font-semibold block mb-1">كسوة هاند بريك</span>
-                <p className="text-xs text-zinc-300 mb-1">تفصيل يدوي متقن</p>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-lg sm:text-2xl font-black text-[#E3211C]">150 ج.م</span>
-                  <span className="text-xs text-zinc-500 line-through">200 ج.م</span>
-                </div>
-              </div>
-              <div className="mt-2 pt-2 border-t border-zinc-800 text-[11px] text-emerald-400 font-bold flex items-center justify-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 inline" /> ضمان سنة على الخامة والتركيب
-              </div>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <a 
+              href="#pricing" 
+              className="bg-[#E3211C] hover:bg-red-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-[0_0_30px_rgba(227,33,28,0.5)] transition transform hover:scale-105"
+            >
+              استكشف الأسعار والخامات
+            </a>
+            <a 
+              href="#configurator" 
+              className="bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-zinc-200 font-bold px-8 py-3.5 rounded-xl backdrop-blur-md transition transform hover:scale-105"
+            >
+              صمّم طارتك الآن
+            </a>
           </div>
-
-          <a 
-            href="#configurator" 
-            className="inline-block bg-[#b8860b] hover:bg-[#996f08] text-white font-bold px-8 py-3 rounded-lg shadow-lg transition transform hover:scale-105 mt-2"
-          >
-           Make your design now 
-          </a>
         </div>
       </section>
-
+      
       {/* 3. سكشن محاكي التخصيص */}
       <section id="configurator" className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
