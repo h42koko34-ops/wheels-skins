@@ -7,7 +7,7 @@ import {
 // استدعاء قاعدة بيانات السيارات من الملف المستقل
 import { CAR_DATABASE } from './carDate';
 
-// استدعاء اللوجو وخلفية الهيدر
+// استدعاء اللوجو وخلفية الهيدر الاحتياطية
 import logo from './logo.png';
 import heroBg from './hero-bg.jpg';
 
@@ -212,7 +212,7 @@ export default function WheelsSkinsApp() {
   return (
     <div className="min-h-screen bg-[#0B0B0B] text-white font-['Cairo'] antialiased selection:bg-[#E3211C] selection:text-white" dir="rtl">
       
-      {/* 1. القائمة العلوية */}
+      {/* 1. Header Navigation */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-black/75 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded overflow-hidden flex items-center justify-center bg-black border border-zinc-800">
@@ -227,11 +227,11 @@ export default function WheelsSkinsApp() {
         </div>
 
         <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-300">
-          <a href="#hero" className="text-[#E3211C] font-bold transition">home</a>
-          <a href="#pricing" className="hover:text-white transition">Price list</a>
-          <a href="#configurator" className="hover:text-white transition">Design your flyer</a>
-          <a href="#branches" className="hover:text-white transition">Our branches and location</a>
-          <a href="#booking" className="hover:text-white transition">Book your appointment</a>
+          <a href="#hero" className="text-[#E3211C] font-bold transition">الرئيسية</a>
+          <a href="#pricing" className="hover:text-white transition">الخامات والأسعار</a>
+          <a href="#configurator" className="hover:text-white transition">صمّم طارتك</a>
+          <a href="#branches" className="hover:text-white transition">فروعنا واللوكيشن</a>
+          <a href="#booking" className="hover:text-white transition">احجز موعدك</a>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
@@ -275,13 +275,13 @@ export default function WheelsSkinsApp() {
             href="#booking" 
             className="bg-[#E3211C] hover:bg-red-700 text-white px-3 sm:px-4 py-2 rounded font-bold text-xs sm:text-sm transition flex items-center gap-1.5 mr-1"
           >
-            <Calendar className="w-3.5 h-3.5" />Book now
+            <Calendar className="w-3.5 h-3.5" />احجز الآن
           </a>
         </div>
       </nav>
-{/* 2. سكشن الهيرو بالفيديو مع اسم وشعار المشروع فقط */}
+
+      {/* 2. Hero Section */}
       <section id="hero" className="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
-        {/* خلفية الفيديو التلقائي */}
         <video
           autoPlay
           loop
@@ -293,10 +293,8 @@ export default function WheelsSkinsApp() {
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
 
-        {/* طبقة تظليل سينمائية */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-[#0B0B0B] z-10" />
 
-        {/* محتوى الهيرو: البراند فقط */}
         <div className="relative z-20 max-w-4xl mx-auto px-4 flex flex-col items-center">
           <span className="text-[#E3211C] font-bold tracking-widest text-xs sm:text-sm uppercase mb-4 px-4 py-1.5 bg-black/60 rounded-full border border-red-500/30 backdrop-blur-md">
             Handcrafted Steering Wheel Wraps
@@ -324,11 +322,75 @@ export default function WheelsSkinsApp() {
           </div>
         </div>
       </section>
-      
-      {/* 3. سكشن محاكي التخصيص */}
+
+      {/* 3. Pricing & Materials Section */}
+      <section id="pricing" className="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-zinc-900">
+        <div className="text-center mb-12">
+          <span className="text-xs font-bold text-[#E3211C] uppercase tracking-widest">شفافية كاملة وضمان حقيقي</span>
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-white mt-2">قائمة الخامات والأسعار</h2>
+          <p className="text-zinc-400 text-xs sm:text-sm mt-1">جميع الأسعار شاملة الخامة، التفصيل، والتركيب الفوري</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+          <div className="bg-zinc-900/90 border border-zinc-700/80 rounded-2xl p-5 text-center backdrop-blur-md shadow-xl flex flex-col justify-between">
+            <div>
+              <span className="text-xs text-zinc-400 font-semibold block mb-1">كسوة الطارة والميكس</span>
+              <p className="text-xs text-zinc-300 mb-2">(سادة - منقط - كاربون - فورجيد)</p>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-2xl font-black text-[#E3211C]">400 ج.م</span>
+                <span className="text-xs text-zinc-500 line-through">450 ج.م</span>
+              </div>
+            </div>
+            <div className="mt-4 pt-3 border-t border-zinc-800 text-xs text-emerald-400 font-bold flex items-center justify-center gap-1">
+              <ShieldCheck className="w-4 h-4 inline" /> ضمان سنة على الخامة والتركيب
+            </div>
+          </div>
+
+          <div className="bg-zinc-900/90 border border-amber-500/50 rounded-2xl p-5 text-center backdrop-blur-md shadow-xl flex flex-col justify-between">
+            <div>
+              <span className="text-xs text-zinc-400 font-semibold block mb-1">كسوة ألكنتارا</span>
+              <p className="text-xs text-zinc-300 mb-2">خامة أصلية فاخرة ورياضية</p>
+              <div className="text-2xl font-black text-white">450 ج.م</div>
+            </div>
+            <div className="mt-4 pt-3 border-t border-zinc-800 text-xs text-amber-400 font-bold flex items-center justify-center gap-1">
+              <AlertTriangle className="w-4 h-4 inline" /> لا يوجد ضمان للألكنتارا
+            </div>
+          </div>
+
+          <div className="bg-zinc-900/90 border border-zinc-700/80 rounded-2xl p-5 text-center backdrop-blur-md shadow-xl flex flex-col justify-between">
+            <div>
+              <span className="text-xs text-zinc-400 font-semibold block mb-1">مقبض الفتيس</span>
+              <p className="text-xs text-zinc-300 mb-2">(سادة أو منقط)</p>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-2xl font-black text-[#E3211C]">250 ج.م</span>
+                <span className="text-xs text-zinc-500 line-through">300 ج.م</span>
+              </div>
+            </div>
+            <div className="mt-4 pt-3 border-t border-zinc-800 text-xs text-emerald-400 font-bold flex items-center justify-center gap-1">
+              <ShieldCheck className="w-4 h-4 inline" /> ضمان سنة على الخامة والتركيب
+            </div>
+          </div>
+
+          <div className="bg-zinc-900/90 border border-zinc-700/80 rounded-2xl p-5 text-center backdrop-blur-md shadow-xl flex flex-col justify-between">
+            <div>
+              <span className="text-xs text-zinc-400 font-semibold block mb-1">كسوة هاند بريك</span>
+              <p className="text-xs text-zinc-300 mb-2">تفصيل يدوي متقن</p>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-2xl font-black text-[#E3211C]">150 ج.م</span>
+                <span className="text-xs text-zinc-500 line-through">200 ج.م</span>
+              </div>
+            </div>
+            <div className="mt-4 pt-3 border-t border-zinc-800 text-xs text-emerald-400 font-bold flex items-center justify-center gap-1">
+              <ShieldCheck className="w-4 h-4 inline" /> ضمان سنة على الخامة والتركيب
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Configurator Section */}
       <section id="configurator" className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">Design your steering wheel and check out the gear shifter and handbrake accessories.</h2>
+          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">صمّم طارتك الفاخرة وشاهد الإضافات فوراً</h2>
           <p className="text-zinc-400 text-sm sm:text-base">اختر الطارة ثم حدد مقبض الفتيس أو الهاند بريك وسيظهر شكل كل قطعة فوراً</p>
         </div>
 
@@ -564,10 +626,10 @@ export default function WheelsSkinsApp() {
         </div>
       </section>
 
-      {/* 4. سكشن الفروع */}
+      {/* 5. Branches Section */}
       <section id="branches" className="py-16 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">Branches and Locations</h2>
+          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">فروعنا واللوكيشن المباشر</h2>
           <p className="text-zinc-400 text-sm">اضغط على أي فرع لفتح موقعه المباشر على Google Maps</p>
         </div>
 
@@ -604,9 +666,9 @@ export default function WheelsSkinsApp() {
         </div>
       </section>
 
-      {/* 5. سكشن الحجز */}
+      {/* 6. Booking Section */}
       <section id="booking" className="py-16 px-6 max-w-3xl mx-auto border-t border-zinc-900 text-center">
-        <h2 className="text-2xl sm:text-3xl font-black mb-3">Book your appointment now.</h2>
+        <h2 className="text-2xl sm:text-3xl font-black mb-3">احجز موعدك الآن</h2>
         <p className="text-zinc-400 text-sm mb-8">اختر الفرع، وحدد الميعاد المناسب وسيتم نقلك مباشرة لتأكيد حجزك عبر واتساب</p>
 
         <form className="space-y-6 text-right bg-zinc-950 p-6 sm:p-8 rounded-2xl border border-zinc-800" onSubmit={handleBookingSubmit}>
@@ -911,11 +973,12 @@ export default function WheelsSkinsApp() {
         </form>
       </section>
 
-    {/* 6. الفوتر */}
+      {/* 7. Footer */}
       <footer className="py-8 border-t border-zinc-900 text-center text-xs text-zinc-500">
-        ©️ {new Date().getFullYear()} WheelSkins. جميع الحقوق محفوظة. By Maestro omar fox 
-      </footer> {/* 7. نافذة تكبير أي صورة */}
-      
+        © {new Date().getFullYear()} WheelSkins. جميع الحقوق محفوظة. By Maestro omar fox
+      </footer>
+
+      {/* 8. Image Modal Preview */}
       {modalImage && (
         <div 
           className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in duration-200"
