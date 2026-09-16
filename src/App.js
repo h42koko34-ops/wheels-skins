@@ -323,67 +323,99 @@ export default function WheelsSkinsApp() {
         </div>
       </section>
 
-      {/* 3. Pricing & Materials Section */}
-      <section id="pricing" className="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-zinc-900">
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold text-[#E3211C] uppercase tracking-widest">شفافية كاملة وضمان حقيقي</span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-white mt-2">قائمة الخامات والأسعار</h2>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-1">جميع الأسعار شاملة الخامة، التفصيل، والتركيب الفوري</p>
+      {/* 3. Pricing & Materials Section - 3D Perspective Cards */}
+      <section id="pricing" className="py-24 px-4 sm:px-6 max-w-7xl mx-auto border-t border-zinc-900/80 [perspective:1000px]">
+        <div className="text-center mb-16">
+          <span className="text-xs font-bold text-[#E3211C] uppercase tracking-[0.25em] bg-red-950/40 border border-red-500/20 px-3.5 py-1 rounded-full inline-block mb-3">
+            شفافية كاملة وضمان حقيقي
+          </span>
+          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">قائمة الخامات والأسعار</h2>
+          <p className="text-zinc-400 text-xs sm:text-sm mt-3 max-w-xl mx-auto">
+            جميع الأسعار شاملة الخامة المختارة، التفصيل اليدوي المتقن، والتركيب الفوري
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-          <div className="bg-zinc-900/90 border border-zinc-700/80 rounded-2xl p-5 text-center backdrop-blur-md shadow-xl flex flex-col justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          {/* كارت 1: الطارة والميكس */}
+          <div className="group relative bg-gradient-to-b from-zinc-900/90 to-zinc-950 border border-zinc-800/80 hover:border-red-500/50 rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-2.5 hover:rotate-1 hover:shadow-[0_20px_40px_rgba(227,33,28,0.18)] flex flex-col justify-between">
             <div>
-              <span className="text-xs text-zinc-400 font-semibold block mb-1">كسوة الطارة والميكس</span>
-              <p className="text-xs text-zinc-300 mb-2">(سادة - منقط - كاربون - فورجيد)</p>
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-2xl font-black text-[#E3211C]">400 ج.م</span>
-                <span className="text-xs text-zinc-500 line-through">450 ج.م</span>
+              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1">الخامة الأساسية</span>
+              <h3 className="text-lg font-bold text-white group-hover:text-[#E3211C] transition-colors">كسوة الطارة والميكس</h3>
+              <p className="text-xs text-zinc-400 mt-1 mb-4">(سادة - منقط - كاربون - فورجيد)</p>
+              
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="text-3xl font-black text-[#E3211C] tracking-tight">400</span>
+                <span className="text-xs font-bold text-zinc-400">ج.م</span>
+                <span className="text-xs text-zinc-600 line-through mr-2">450 ج.م</span>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-zinc-800 text-xs text-emerald-400 font-bold flex items-center justify-center gap-1">
-              <ShieldCheck className="w-4 h-4 inline" /> ضمان سنة على الخامة والتركيب
+
+            <div className="pt-4 border-t border-zinc-800/80 text-xs text-emerald-400 font-bold flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>ضمان سنة على الخامة والتركيب</span>
             </div>
           </div>
 
-          <div className="bg-zinc-900/90 border border-amber-500/50 rounded-2xl p-5 text-center backdrop-blur-md shadow-xl flex flex-col justify-between">
+          {/* كارت 2: الألكنتارا */}
+          <div className="group relative bg-gradient-to-b from-zinc-900/90 to-zinc-950 border border-amber-500/40 hover:border-amber-400 rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-2.5 hover:-rotate-1 hover:shadow-[0_20px_40px_rgba(245,158,11,0.18)] flex flex-col justify-between">
             <div>
-              <span className="text-xs text-zinc-400 font-semibold block mb-1">كسوة ألكنتارا</span>
-              <p className="text-xs text-zinc-300 mb-2">خامة أصلية فاخرة ورياضية</p>
-              <div className="text-2xl font-black text-white">450 ج.م</div>
+              <span className="text-[11px] font-bold text-amber-400/90 uppercase tracking-wider block mb-1">فئة السوبر كار</span>
+              <h3 className="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">كسوة ألكنتارا رياضية</h3>
+              <p className="text-xs text-zinc-400 mt-1 mb-4">ملمس مخملي فاخر وعزل حراري فائق</p>
+              
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="text-3xl font-black text-white tracking-tight">450</span>
+                <span className="text-xs font-bold text-zinc-400">ج.م</span>
+              </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-zinc-800 text-xs text-amber-400 font-bold flex items-center justify-center gap-1">
-              <AlertTriangle className="w-4 h-4 inline" /> لا يوجد ضمان للألكنتارا
+
+            <div className="pt-4 border-t border-zinc-800/80 text-xs text-amber-400/90 font-bold flex items-center gap-1.5">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>خامة طبيعية (بدون ضمان)</span>
             </div>
           </div>
 
-          <div className="bg-zinc-900/90 border border-zinc-700/80 rounded-2xl p-5 text-center backdrop-blur-md shadow-xl flex flex-col justify-between">
+          {/* كارت 3: مقبض الفتيس */}
+          <div className="group relative bg-gradient-to-b from-zinc-900/90 to-zinc-950 border border-zinc-800/80 hover:border-red-500/50 rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-2.5 hover:rotate-1 hover:shadow-[0_20px_40px_rgba(227,33,28,0.18)] flex flex-col justify-between">
             <div>
-              <span className="text-xs text-zinc-400 font-semibold block mb-1">مقبض الفتيس</span>
-              <p className="text-xs text-zinc-300 mb-2">(سادة أو منقط)</p>
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-2xl font-black text-[#E3211C]">250 ج.م</span>
-                <span className="text-xs text-zinc-500 line-through">300 ج.م</span>
+              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1">إضافة تفصيل</span>
+              <h3 className="text-lg font-bold text-white group-hover:text-[#E3211C] transition-colors">مقبض الفتيس</h3>
+              <p className="text-xs text-zinc-400 mt-1 mb-4">(جلد سادة أو منقط خياطة يد)</p>
+              
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="text-3xl font-black text-[#E3211C] tracking-tight">250</span>
+                <span className="text-xs font-bold text-zinc-400">ج.م</span>
+                <span className="text-xs text-zinc-600 line-through mr-2">300 ج.م</span>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-zinc-800 text-xs text-emerald-400 font-bold flex items-center justify-center gap-1">
-              <ShieldCheck className="w-4 h-4 inline" /> ضمان سنة على الخامة والتركيب
+
+            <div className="pt-4 border-t border-zinc-800/80 text-xs text-emerald-400 font-bold flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>ضمان سنة على الخامة والتركيب</span>
             </div>
           </div>
 
-          <div className="bg-zinc-900/90 border border-zinc-700/80 rounded-2xl p-5 text-center backdrop-blur-md shadow-xl flex flex-col justify-between">
+          {/* كارت 4: الهاند بريك */}
+          <div className="group relative bg-gradient-to-b from-zinc-900/90 to-zinc-950 border border-zinc-800/80 hover:border-red-500/50 rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-2.5 hover:-rotate-1 hover:shadow-[0_20px_40px_rgba(227,33,28,0.18)] flex flex-col justify-between">
             <div>
-              <span className="text-xs text-zinc-400 font-semibold block mb-1">كسوة هاند بريك</span>
-              <p className="text-xs text-zinc-300 mb-2">تفصيل يدوي متقن</p>
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-2xl font-black text-[#E3211C]">150 ج.م</span>
-                <span className="text-xs text-zinc-500 line-through">200 ج.م</span>
+              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1">إضافة تفصيل</span>
+              <h3 className="text-lg font-bold text-white group-hover:text-[#E3211C] transition-colors">كسوة هاند بريك</h3>
+              <p className="text-xs text-zinc-400 mt-1 mb-4">تفصيل محكم ومطابق للون الطارة</p>
+              
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="text-3xl font-black text-[#E3211C] tracking-tight">150</span>
+                <span className="text-xs font-bold text-zinc-400">ج.م</span>
+                <span className="text-xs text-zinc-600 line-through mr-2">200 ج.م</span>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-zinc-800 text-xs text-emerald-400 font-bold flex items-center justify-center gap-1">
-              <ShieldCheck className="w-4 h-4 inline" /> ضمان سنة على الخامة والتركيب
+
+            <div className="pt-4 border-t border-zinc-800/80 text-xs text-emerald-400 font-bold flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>ضمان سنة على الخامة والتركيب</span>
             </div>
           </div>
+
         </div>
       </section>
 
