@@ -302,10 +302,9 @@ export default function WheelsSkinsApp() {
           <h1 className="text-4xl sm:text-7xl font-black text-white mb-4 tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
             Wheels <span className="text-[#E3211C]">Skins</span>
           </h1>
-          <p className="text-zinc-300 text-sm sm:text-xl mb-8 max-w-2xl font-light drop-shadow-md">
-            فن وحرفة كسوة الطارة والفتيس بأعلى معايير الجلود والدرزات الرياضية الفاخرة
+          <p className="text-zinc-300/60 text-xs sm:text-sm mb-8 px-4 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/5 font-light">
+           wellcome to wheels skins, the best place to customize your car's steering wheel with high-quality materials and craftsmanship.
           </p>
-
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <a 
               href="#pricing" 
