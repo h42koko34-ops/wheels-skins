@@ -72,7 +72,153 @@ const TIME_SLOTS = [
   '09:00 م', '09:30 م',
   '10:00 م'
 ];
+// مكون 3D سينمائي مع انيميشن سكرول ودعم كامل للموبايل والكمبيوتر
+const Card3D = ({ children, className = "", delay = 0 }) => {
+  const [rotate, setRotate] = React.useState({ x: 0, y: 0 });
+  const [glare, setGlare] = React.useState({ x: 50, y: 50, opacity: 0 });
+  const [isVisible, setIsVisible] = React.useState(false);
+  const cardRef = React.useRef(null);
 
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    if (cardRef.current) observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const handleMouseMove = (e) => {
+    if (window.matchMedia("(hover: none)").matches) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    setRotate({
+      x: ((y - centerY) / centerY) * -8,
+      y: ((x - centerX) / centerX) * 8,
+    });
+    setGlare({
+      x: (x / rect.width) * 100,
+      y: (y / rect.height) * 100,
+      opacity: 0.2,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setRotate({ x: 0, y: 0 });
+    setGlare((prev) => ({ ...prev, opacity: 0 }));
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: isVisible
+          ? `perspective(1000px) rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) translateY(0)`
+          : "perspective(1000px) rotateX(15deg) translateY(60px)",
+        opacity: isVisible ? 1 : 0,
+        transition: `transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, opacity 0.8s ease-out ${delay}ms`,
+      }}
+      className={`relative rounded-2xl overflow-hidden will-change-transform transform-gpu active:scale-[0.98] touch-manipulation ${className}`}
+    >
+      <div
+        className="pointer-events-none absolute inset-0 hidden md:block transition-opacity duration-300 z-20"
+        style={{
+          opacity: glare.opacity,
+          background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.35) 0%, transparent 60%)`,
+        }}
+      />
+      {children}
+    </div>
+  );
+}; 
+// مكون حركة WHEELS SKINS ثلاثية الأبعاد مع خيط الليزر الأحمر في السكرول
+const Hero3DTitle = () => {
+  const [scrollY, setScrollY] = React.useState(0);
+
+  React.useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrollY(window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const progress = Math.min(Math.max(scrollY / 550, 0), 1);
+  const translateY = progress * 220;
+  const translateZ = progress * -180;
+  const rotateX = progress * 30;
+  const scale = 1 - progress * 0.22;
+  const opacity = 1 - progress * 0.55;
+
+  const lineHeight = Math.max(0, Math.min((scrollY - 80) * 1.6, 650));
+  const showLine = scrollY > 70;
+
+  return (
+    <div
+      style={{ perspective: "1200px" }}
+      className="relative w-full flex flex-col items-center justify-center pointer-events-none select-none py-10"
+    >
+      <div
+        style={{
+          transform: `translate3d(0, ${translateY}px, ${translateZ}px) rotateX(${rotateX}deg) scale(${scale})`,
+          opacity: opacity,
+          transition: "transform 0.08s ease-out",
+        }}
+        className="will-change-transform transform-gpu flex flex-col items-center text-center z-20"
+      >
+        <div className="absolute -inset-8 bg-gradient-to-r from-red-600/20 via-[#E3211C]/35 to-red-600/20 blur-3xl -z-10 rounded-full" />
+
+        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-200 to-zinc-600 drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]">
+          WHEELS<span className="text-[#E3211C] drop-shadow-[0_0_35px_rgba(227,33,28,0.85)]">SKINS</span>
+        </h1>
+
+        <div className="flex items-center gap-3 mt-4 px-4 py-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-md shadow-2xl">
+          <span className="w-2 h-2 rounded-full bg-[#E3211C] animate-ping" />
+          <span className="text-xs sm:text-sm font-semibold tracking-[0.3em] text-zinc-300 uppercase">
+            Custom Steering & Luxury Interiors
+          </span>
+        </div>
+      </div>
+
+      <div
+        className="absolute top-[75%] left-1/2 -translate-x-1/2 w-0.5 flex flex-col items-center z-10 pointer-events-none transition-opacity duration-300"
+        style={{ opacity: showLine ? 1 : 0 }}
+      >
+        <div
+          style={{ height: `${lineHeight}px` }}
+          className="w-[2px] bg-gradient-to-b from-[#E3211C] via-red-500 to-[#E3211C] shadow-[0_0_12px_#E3211C,0_0_24px_rgba(227,33,28,0.6)] will-change-[height] transition-all duration-75"
+        />
+
+        {lineHeight > 30 && (
+          <div className="relative flex items-center justify-center -mt-1.5">
+            <div className="w-3 h-3 rounded-full bg-[#E3211C] shadow-[0_0_15px_#E3211C,0_0_30px_#ff0000] animate-pulse" />
+            <div className="absolute w-6 h-6 rounded-full bg-red-500/30 animate-ping" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 export default function WheelsSkinsApp() {
   const wheelOptions = [
     { id: 'plain', name: 'طارة: جلد سادة', price: 400, priceText: '400 ج.م', image: wheelPlain },
@@ -227,11 +373,11 @@ export default function WheelsSkinsApp() {
         </div>
 
         <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-300">
-          <a href="#hero" className="text-[#E3211C] font-bold transition">الرئيسية</a>
-          <a href="#pricing" className="hover:text-white transition">الخامات والأسعار</a>
-          <a href="#configurator" className="hover:text-white transition">صمّم طارتك</a>
-          <a href="#branches" className="hover:text-white transition">فروعنا واللوكيشن</a>
-          <a href="#booking" className="hover:text-white transition">احجز موعدك</a>
+          <a href="#hero" className="text-[#E3211C] font-bold transition">Home</a>
+          <a href="#pricing" className="hover:text-white transition">Materials and prices</a>
+          <a href="#configurator" className="hover:text-white transition"> Design your flyer</a>
+          <a href="#branches" className="hover:text-white transition"> Our branches and location</a>
+          <a href="#booking" className="hover:text-white transition">Book your appointment </a>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
@@ -275,132 +421,166 @@ export default function WheelsSkinsApp() {
             href="#booking" 
             className="bg-[#E3211C] hover:bg-red-700 text-white px-3 sm:px-4 py-2 rounded font-bold text-xs sm:text-sm transition flex items-center gap-1.5 mr-1"
           >
-            <Calendar className="w-3.5 h-3.5" />احجز الآن
+            <Calendar className="w-3.5 h-3.5" />Book now
           </a>
         </div>
       </nav>
 
       {/* 2. Hero Section */}
-      <section id="hero" className="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
+      <section id="hero " className="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
         <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster={heroBg}
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        >
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
+  autoPlay
+  loop
+  muted
+  playsInline
+  poster={heroBg}
+  preload="auto"
+  className="absolute inset-0 w-full h-full object-cover object-center transform-gpu"
+  style={{
+    imageRendering: "crisp-edges",
+    backfaceVisibility: "hidden",
+  }}
+>
+  <source src="/hero-video.mp4" type="video/mp4" />
+</video>
+        <Hero3DTitle />
 
         <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-[#0B0B0B] z-10" />
 
-        <div className="relative z-20 max-w-4xl mx-auto px-4 flex flex-col items-center">
-          <span className="text-[#E3211C] font-bold tracking-widest text-xs sm:text-sm uppercase mb-4 px-4 py-1.5 bg-black/60 rounded-full border border-red-500/30 backdrop-blur-md">
-            Handcrafted Steering Wheel Wraps
-          </span>
-          <h1 className="text-4xl sm:text-7xl font-black text-white mb-4 tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
-            Wheels <span className="text-[#E3211C]">Skins</span>
-          </h1>
-          <p className="text-zinc-300/60 text-xs sm:text-sm mb-8 px-4 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/5 font-light">
-           wellcome to wheels skins, the best place to customize your car's steering wheel with high-quality materials and craftsmanship.
-          </p>
-         
-        </div>
       </section>
 
-      {/* 3. Pricing & Materials Section - 3D Perspective Cards */}
-      <section id="pricing" className="py-24 px-4 sm:px-6 max-w-7xl mx-auto border-t border-zinc-900/80 [perspective:1000px]">
-        <div className="text-center mb-16">
-          <span className="text-xs font-bold text-[#E3211C] uppercase tracking-[0.25em] bg-red-950/40 border border-red-500/20 px-3.5 py-1 rounded-full inline-block mb-3">
-            شفافية كاملة وضمان حقيقي
-          </span>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">قائمة الخامات والأسعار</h2>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-3 max-w-xl mx-auto">
-            جميع الأسعار شاملة الخامة المختارة، التفصيل اليدوي المتقن، والتركيب الفوري
+      {/* 3. سكشن الأسعار والخامات بتصميم 4K وإضاءة ثلاثية الأبعاد */}
+      <section id="pricing" className="relative py-28 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#E3211C]/15 blur-[140px] pointer-events-none rounded-full" />
+        <div className="absolute bottom-10 left-10 w-[400px] h-[250px] bg-red-950/20 blur-[120px] pointer-events-none rounded-full" />
+
+        <div className="relative z-10 text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 backdrop-blur-md mb-4 shadow-[0_0_20px_rgba(227,33,28,0.2)]">
+            <span className="w-2 h-2 rounded-full bg-[#E3211C] animate-pulse" />
+            <span className="text-xs font-black text-red-400 uppercase tracking-[0.25em]">
+              MASTER CRAFTSMANSHIP
+            </span>
+          </div>
+          <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
+           Premium Materials. Exceptional Precision
+          </h2>
+          <p className="text-zinc-400 text-sm sm:text-base mt-4 max-w-2xl mx-auto font-light leading-relaxed">
+            Handcrafted with millimeter precision, it combines the durability of athletic leather with an ultra-comfy feel
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          
-          {/* كارت 1: الطارة والميكس */}
-          <div className="group relative bg-gradient-to-b from-zinc-900/90 to-zinc-950 border border-zinc-800/80 hover:border-red-500/50 rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-2.5 hover:rotate-1 hover:shadow-[0_20px_40px_rgba(227,33,28,0.18)] flex flex-col justify-between">
+        <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+
+          <Card3D delay={100} className="bg-gradient-to-b from-zinc-900/95 via-zinc-950/90 to-black border border-zinc-800/90 hover:border-red-500/60 shadow-[0_15px_35px_rgba(0,0,0,0.7)] hover:shadow-[0_20px_50px_rgba(227,33,28,0.25)] p-7 flex flex-col justify-between group">
             <div>
-              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1">الخامة الأساسية</span>
-              <h3 className="text-lg font-bold text-white group-hover:text-[#E3211C] transition-colors">كسوة الطارة والميكس</h3>
-              <p className="text-xs text-zinc-400 mt-1 mb-4">(سادة - منقط - كاربون - فورجيد)</p>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-[11px] font-black text-red-500 uppercase tracking-wider bg-red-950/40 border border-red-800/40 px-2.5 py-0.5 rounded-md">
+                Most Requested
+                </span>
+                <span className="text-xs text-zinc-500 font-mono">#01</span>
+              </div>
+              <h3 className="text-xl font-black text-white group-hover:text-red-400 transition-colors">
+                كسوة الطارة والميكس
+              </h3>
+              <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
+                (سادة • منقط •  كاربون • فورجيد )
+              </p>
               
               <div className="flex items-baseline gap-2 mb-6">
-                <span className="text-3xl font-black text-[#E3211C] tracking-tight">400</span>
+                <span className="text-4xl font-black text-white tracking-tight group-hover:text-[#E3211C] transition-colors">400</span>
                 <span className="text-xs font-bold text-zinc-400">ج.م</span>
                 <span className="text-xs text-zinc-600 line-through mr-2">450 ج.م</span>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-zinc-800/80 text-xs text-emerald-400 font-bold flex items-center gap-1.5">
+            <div className="pt-4 border-t border-zinc-800/80 text-xs text-emerald-400 font-bold flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>ضمان سنة على الخامة والتركيب</span>
+              <span>ضمان معتمد لمدة سنة كاملة</span>
             </div>
-          </div>
+          </Card3D>
 
-          {/* كارت 2: الألكنتارا */}
-          <div className="group relative bg-gradient-to-b from-zinc-900/90 to-zinc-950 border border-amber-500/40 hover:border-amber-400 rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-2.5 hover:-rotate-1 hover:shadow-[0_20px_40px_rgba(245,158,11,0.18)] flex flex-col justify-between">
+          <Card3D delay={200} className="bg-gradient-to-b from-zinc-900/95 via-zinc-950/90 to-black border border-amber-500/40 hover:border-amber-400 shadow-[0_15px_35px_rgba(0,0,0,0.7)] hover:shadow-[0_20px_50px_rgba(245,158,11,0.25)] p-7 flex flex-col justify-between group">
             <div>
-              <span className="text-[11px] font-bold text-amber-400/90 uppercase tracking-wider block mb-1">فئة السوبر كار</span>
-              <h3 className="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">كسوة ألكنتارا رياضية</h3>
-              <p className="text-xs text-zinc-400 mt-1 mb-4">ملمس مخملي فاخر وعزل حراري فائق</p>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-[11px] font-black text-amber-400 uppercase tracking-wider bg-amber-950/40 border border-amber-800/40 px-2.5 py-0.5 rounded-md">
+                  SUPERCAR ED.
+                </span>
+                <span className="text-xs text-zinc-500 font-mono">#02</span>
+              </div>
+              <h3 className="text-xl font-black text-white group-hover:text-amber-400 transition-colors">
+                ألكنتارا إيطالي فاخر
+              </h3>
+              <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
+               الكنتارا ملمس عازل للحرارة والعرق    
+              </p>
               
               <div className="flex items-baseline gap-2 mb-6">
-                <span className="text-3xl font-black text-white tracking-tight">450</span>
+                <span className="text-4xl font-black text-white tracking-tight group-hover:text-amber-400 transition-colors">450</span>
                 <span className="text-xs font-bold text-zinc-400">ج.م</span>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-zinc-800/80 text-xs text-amber-400/90 font-bold flex items-center gap-1.5">
+            <div className="pt-4 border-t border-zinc-800/80 text-xs text-amber-400 font-bold flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>خامة طبيعية (بدون ضمان)</span>
+              <span>خامة طبيعية ناعمة (بدون ضمان)</span>
             </div>
-          </div>
+          </Card3D>
 
-          {/* كارت 3: مقبض الفتيس */}
-          <div className="group relative bg-gradient-to-b from-zinc-900/90 to-zinc-950 border border-zinc-800/80 hover:border-red-500/50 rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-2.5 hover:rotate-1 hover:shadow-[0_20px_40px_rgba(227,33,28,0.18)] flex flex-col justify-between">
+          <Card3D delay={300} className="bg-gradient-to-b from-zinc-900/95 via-zinc-950/90 to-black border border-zinc-800/90 hover:border-red-500/60 shadow-[0_15px_35px_rgba(0,0,0,0.7)] hover:shadow-[0_20px_50px_rgba(227,33,28,0.25)] p-7 flex flex-col justify-between group">
             <div>
-              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1">إضافة تفصيل</span>
-              <h3 className="text-lg font-bold text-white group-hover:text-[#E3211C] transition-colors">مقبض الفتيس</h3>
-              <p className="text-xs text-zinc-400 mt-1 mb-4">(جلد سادة أو منقط خياطة يد)</p>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-[11px] font-black text-zinc-400 uppercase tracking-wider bg-zinc-800/50 border border-zinc-700/50 px-2.5 py-0.5 rounded-md">
+                  A complementary touch
+                </span>
+                <span className="text-xs text-zinc-500 font-mono">#03</span>
+              </div>
+              <h3 className="text-xl font-black text-white group-hover:text-red-400 transition-colors">
+                مقبض الفتيس
+              </h3>
+              <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
+                تفصيل جلدي مخصص مع خياطة يدوي متطابقة مع  الطارة
+              </p>
               
               <div className="flex items-baseline gap-2 mb-6">
-                <span className="text-3xl font-black text-[#E3211C] tracking-tight">250</span>
+                <span className="text-4xl font-black text-white tracking-tight group-hover:text-[#E3211C] transition-colors">250</span>
                 <span className="text-xs font-bold text-zinc-400">ج.م</span>
                 <span className="text-xs text-zinc-600 line-through mr-2">300 ج.م</span>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-zinc-800/80 text-xs text-emerald-400 font-bold flex items-center gap-1.5">
+            <div className="pt-4 border-t border-zinc-800/80 text-xs text-emerald-400 font-bold flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>ضمان سنة على الخامة والتركيب</span>
+              <span>ضمان معتمد لمدة سنة كاملة</span>
             </div>
-          </div>
+          </Card3D>
 
-          {/* كارت 4: الهاند بريك */}
-          <div className="group relative bg-gradient-to-b from-zinc-900/90 to-zinc-950 border border-zinc-800/80 hover:border-red-500/50 rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-2.5 hover:-rotate-1 hover:shadow-[0_20px_40px_rgba(227,33,28,0.18)] flex flex-col justify-between">
+          <Card3D delay={400} className="bg-gradient-to-b from-zinc-900/95 via-zinc-950/90 to-black border border-zinc-800/90 hover:border-red-500/60 shadow-[0_15px_35px_rgba(0,0,0,0.7)] hover:shadow-[0_20px_50px_rgba(227,33,28,0.25)] p-7 flex flex-col justify-between group">
             <div>
-              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1">إضافة تفصيل</span>
-              <h3 className="text-lg font-bold text-white group-hover:text-[#E3211C] transition-colors">كسوة هاند بريك</h3>
-              <p className="text-xs text-zinc-400 mt-1 mb-4">تفصيل محكم ومطابق للون الطارة</p>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-[11px] font-black text-zinc-400 uppercase tracking-wider bg-zinc-800/50 border border-zinc-700/50 px-2.5 py-0.5 rounded-md">
+                  A complementary touch
+                </span>
+                <span className="text-xs text-zinc-500 font-mono">#04</span>
+              </div>
+              <h3 className="text-xl font-black text-white group-hover:text-red-400 transition-colors">
+                كسوة الهاند بريك
+              </h3>
+              <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
+                إحكام شد الجلد لمنع أي فراغات وإعطاء المظهر الأصلي 
+              </p>
               
               <div className="flex items-baseline gap-2 mb-6">
-                <span className="text-3xl font-black text-[#E3211C] tracking-tight">150</span>
+                <span className="text-4xl font-black text-white tracking-tight group-hover:text-[#E3211C] transition-colors">150</span>
                 <span className="text-xs font-bold text-zinc-400">ج.م</span>
                 <span className="text-xs text-zinc-600 line-through mr-2">200 ج.م</span>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-zinc-800/80 text-xs text-emerald-400 font-bold flex items-center gap-1.5">
+            <div className="pt-4 border-t border-zinc-800/80 text-xs text-emerald-400 font-bold flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>ضمان سنة على الخامة والتركيب</span>
+              <span>ضمان معتمد لمدة سنة كاملة</span>
             </div>
-          </div>
+          </Card3D>
 
         </div>
       </section>
@@ -408,7 +588,7 @@ export default function WheelsSkinsApp() {
       {/* 4. Configurator Section */}
       <section id="configurator" className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">صمّم طارتك الفاخرة وشاهد الإضافات فوراً</h2>
+          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">Design your luxury kite and see the add-ons instantly</h2>
           <p className="text-zinc-400 text-sm sm:text-base">اختر الطارة ثم حدد مقبض الفتيس أو الهاند بريك وسيظهر شكل كل قطعة فوراً</p>
         </div>
 
@@ -647,7 +827,7 @@ export default function WheelsSkinsApp() {
       {/* 5. Branches Section */}
       <section id="branches" className="py-16 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">فروعنا واللوكيشن المباشر</h2>
+          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">Our branches and live location  </h2>
           <p className="text-zinc-400 text-sm">اضغط على أي فرع لفتح موقعه المباشر على Google Maps</p>
         </div>
 
@@ -686,7 +866,7 @@ export default function WheelsSkinsApp() {
 
       {/* 6. Booking Section */}
       <section id="booking" className="py-16 px-6 max-w-3xl mx-auto border-t border-zinc-900 text-center">
-        <h2 className="text-2xl sm:text-3xl font-black mb-3">احجز موعدك الآن</h2>
+        <h2 className="text-2xl sm:text-3xl font-black mb-3">  Book your appointment now</h2>
         <p className="text-zinc-400 text-sm mb-8">اختر الفرع، وحدد الميعاد المناسب وسيتم نقلك مباشرة لتأكيد حجزك عبر واتساب</p>
 
         <form className="space-y-6 text-right bg-zinc-950 p-6 sm:p-8 rounded-2xl border border-zinc-800" onSubmit={handleBookingSubmit}>
