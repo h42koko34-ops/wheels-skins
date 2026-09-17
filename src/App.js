@@ -220,9 +220,6 @@ const Hero3DTitle = () => {
   );
 };
 // خلفية 3D سينمائية خفيفة جداً مع السكرول معتمدة 100% على الـ GPU
-const Cinematic3DBackground = () => {
-  const [scrollY, setScrollY] = React.useState(0);
-
   React.useEffect(() => {
     let ticking = false;
     const handleScroll = () => {
@@ -239,53 +236,7 @@ const Cinematic3DBackground = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-black">
-      {/* 1. شبكة أفقية ثلاثية الأبعاد بتأثير السفر عبر الزمن مع السكرول */}
-      <div
-        className="absolute inset-0 opacity-[0.14] will-change-transform transform-gpu"
-        style={{
-          perspective: "600px",
-          perspectiveOrigin: "50% 30%",
-        }}
-      >
-        <div
-          style={{
-            transform: `rotateX(72deg) translate3d(0, ${(scrollY * 0.45) % 80}px, 0)`,
-            backgroundImage: `
-              linear-gradient(to right, rgba(227, 33, 28, 0.4) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(227, 33, 28, 0.4) 1px, transparent 1px)
-            `,
-            backgroundSize: "80px 80px",
-            maskImage: "linear-gradient(to bottom, transparent 10%, black 50%, transparent 95%)",
-            WebkitMaskImage: "linear-gradient(to bottom, transparent 10%, black 50%, transparent 95%)",
-          }}
-          className="absolute -inset-[100%] w-[300%] h-[300%]"
-        />
-      </div>
 
-      {/* 2. مجسم ضوئي عائم في العمق البعيد (Deep Parallax Orb) */}
-      <div
-        style={{
-          transform: `translate3d(${-scrollY * 0.08}px, ${-scrollY * 0.2}px, 0)`,
-        }}
-        className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-[#E3211C]/15 blur-[130px] will-change-transform transform-gpu"
-      />
-
-      {/* 3. مجسم ضوئي في المنتصف يتحرك باتجاه معاكس يعطي عمق مجسم حقيقي */}
-      <div
-        style={{
-          transform: `translate3d(${scrollY * 0.06}px, ${-scrollY * 0.35}px, 0)`,
-        }}
-        className="absolute top-1/2 -right-40 w-[600px] h-[600px] rounded-full bg-red-950/25 blur-[150px] will-change-transform transform-gpu"
-      />
-
-      {/* 4. تدرج غامق ناعم لضمان وضوح كامل للكلام والكروت فوقها */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/90 pointer-events-none" />
-    
-    </div>
-  );
-};
 export default function WheelsSkinsApp() {
   const wheelOptions = [
     { id: 'plain', name: 'طارة: جلد سادة', price: 400, priceText: '400 ج.م', image: wheelPlain },
@@ -424,7 +375,6 @@ export default function WheelsSkinsApp() {
 
   return (
     <div className="min-h-screen bg-[#0B0B0B] text-white font-['Cairo'] antialiased selection:bg-[#E3211C] selection:text-white" dir="rtl">
-      <Cinematic3DBackground />
       {/* 1. Header Navigation */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-black/75 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
