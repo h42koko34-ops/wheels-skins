@@ -143,100 +143,6 @@ const Card3D = ({ children, className = "", delay = 0 }) => {
     </div>
   );
 }; 
-// مكون حركة WHEELS SKINS ثلاثية الأبعاد مع خيط الليزر الأحمر في السكرول
-const Hero3DTitle = () => {
-  const [scrollY, setScrollY] = React.useState(0);
-
-  React.useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrollY(window.scrollY);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const progress = Math.min(Math.max(scrollY / 550, 0), 1);
-  const translateY = progress * 220;
-  const translateZ = progress * -180;
-  const rotateX = progress * 30;
-  const scale = 1 - progress * 0.22;
-  const opacity = 1 - progress * 0.55;
-
-  const lineHeight = Math.max(0, Math.min((scrollY - 80) * 1.6, 650));
-  const showLine = scrollY > 70;
-
-  return (
-    <div
-      style={{ perspective: "1200px" }}
-      className="relative w-full flex flex-col items-center justify-center pointer-events-none select-none py-10"
-    >
-      <div
-        style={{
-          transform: `translate3d(0, ${translateY}px, ${translateZ}px) rotateX(${rotateX}deg) scale(${scale})`,
-          opacity: opacity,
-          transition: "transform 0.08s ease-out",
-        }}
-        className="will-change-transform transform-gpu flex flex-col items-center text-center z-20"
-      >
-        <div className="absolute -inset-8 bg-gradient-to-r from-red-600/20 via-[#E3211C]/35 to-red-600/20 blur-3xl -z-10 rounded-full" />
-
-        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-200 to-zinc-600 drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]">
-          WHEELS<span className="text-[#E3211C] drop-shadow-[0_0_35px_rgba(227,33,28,0.85)]">SKINS</span>
-        </h1>
-
-        <div className="flex items-center gap-3 mt-4 px-4 py-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-md shadow-2xl">
-          <span className="w-2 h-2 rounded-full bg-[#E3211C] animate-ping" />
-          <span className="text-xs sm:text-sm font-semibold tracking-[0.3em] text-zinc-300 uppercase">
-            Custom Steering & Luxury Interiors
-          </span>
-        </div>
-      </div>
-
-      <div
-        className="absolute top-[75%] left-1/2 -translate-x-1/2 w-0.5 flex flex-col items-center z-10 pointer-events-none transition-opacity duration-300"
-        style={{ opacity: showLine ? 1 : 0 }}
-      >
-        <div
-          style={{ height: `${lineHeight}px` }}
-          className="w-[2px] bg-gradient-to-b from-[#E3211C] via-red-500 to-[#E3211C] shadow-[0_0_12px_#E3211C,0_0_24px_rgba(227,33,28,0.6)] will-change-[height] transition-all duration-75"
-        />
-
-        {lineHeight > 30 && (
-          <div className="relative flex items-center justify-center -mt-1.5">
-            <div className="w-3 h-3 rounded-full bg-[#E3211C] shadow-[0_0_15px_#E3211C,0_0_30px_#ff0000] animate-pulse" />
-            <div className="absolute w-6 h-6 rounded-full bg-red-500/30 animate-ping" />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-// خلفية 3D سينمائية خفيفة جداً مع السكرول معتمدة 100% على الـ GPU
-  React.useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrollY(window.scrollY);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-
 export default function WheelsSkinsApp() {
   const wheelOptions = [
     { id: 'plain', name: 'طارة: جلد سادة', price: 400, priceText: '400 ج.م', image: wheelPlain },
@@ -375,6 +281,7 @@ export default function WheelsSkinsApp() {
 
   return (
     <div className="min-h-screen bg-[#0B0B0B] text-white font-['Cairo'] antialiased selection:bg-[#E3211C] selection:text-white" dir="rtl">
+      
       {/* 1. Header Navigation */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-black/75 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -390,11 +297,11 @@ export default function WheelsSkinsApp() {
         </div>
 
         <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-300">
-          <a href="#hero" className="text-[#E3211C] font-bold transition">Home</a>
-          <a href="#pricing" className="hover:text-white transition">Materials and prices</a>
-          <a href="#configurator" className="hover:text-white transition"> Design your flyer</a>
-          <a href="#branches" className="hover:text-white transition"> Our branches and location</a>
-          <a href="#booking" className="hover:text-white transition">Book your appointment </a>
+          <a href="#hero" className="text-[#E3211C] font-bold transition">الرئيسية</a>
+          <a href="#pricing" className="hover:text-white transition">الخامات والأسعار</a>
+          <a href="#configurator" className="hover:text-white transition">صمّم طارتك</a>
+          <a href="#branches" className="hover:text-white transition">فروعنا واللوكيشن</a>
+          <a href="#booking" className="hover:text-white transition">احجز موعدك</a>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
@@ -438,32 +345,38 @@ export default function WheelsSkinsApp() {
             href="#booking" 
             className="bg-[#E3211C] hover:bg-red-700 text-white px-3 sm:px-4 py-2 rounded font-bold text-xs sm:text-sm transition flex items-center gap-1.5 mr-1"
           >
-            <Calendar className="w-3.5 h-3.5" />Book now
+            <Calendar className="w-3.5 h-3.5" />احجز الآن
           </a>
         </div>
       </nav>
 
       {/* 2. Hero Section */}
-      <section id="hero " className="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
+      <section id="hero" className="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
         <video
-  autoPlay
-  loop
-  muted
-  playsInline
-  poster={heroBg}
-  preload="auto"
-  className="absolute inset-0 w-full h-full object-cover object-center transform-gpu"
-  style={{
-    imageRendering: "crisp-edges",
-    backfaceVisibility: "hidden",
-  }}
->
-  <source src="/hero-video.mp4" type="video/mp4" />
-</video>
-        <Hero3DTitle />
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={heroBg}
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
 
         <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-[#0B0B0B] z-10" />
 
+        <div className="relative z-20 max-w-4xl mx-auto px-4 flex flex-col items-center">
+          <span className="text-[#E3211C] font-bold tracking-widest text-xs sm:text-sm uppercase mb-4 px-4 py-1.5 bg-black/60 rounded-full border border-red-500/30 backdrop-blur-md">
+           ♥ wellcome to ♥
+          </span>
+          <h1 className="text-4xl sm:text-7xl font-black text-white mb-4 tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+            Wheels <span className="text-[#E3211C]">Skins</span>
+          </h1>
+          <p className="text-zinc-300/60 text-xs sm:text-sm mb-8 px-4 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/5 font-light">
+           the best place to customize your car's steering wheel with high-quality materials and craftsmanship.
+          </p>
+         
+        </div>
       </section>
 
       {/* 3. سكشن الأسعار والخامات بتصميم 4K وإضاءة ثلاثية الأبعاد */}
@@ -479,10 +392,10 @@ export default function WheelsSkinsApp() {
             </span>
           </div>
           <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
-           Premium Materials. Exceptional Precision
+            خامات فاخرة .. دقة استثنائية
           </h2>
           <p className="text-zinc-400 text-sm sm:text-base mt-4 max-w-2xl mx-auto font-light leading-relaxed">
-            Handcrafted with millimeter precision, it combines the durability of athletic leather with an ultra-comfy feel
+            تفصيل يدوي بدقة المليمتر يجمع بين متانة الجلد الرياضي وملمس الراحة الفائق
           </p>
         </div>
 
@@ -492,7 +405,7 @@ export default function WheelsSkinsApp() {
             <div>
               <div className="flex justify-between items-center mb-3">
                 <span className="text-[11px] font-black text-red-500 uppercase tracking-wider bg-red-950/40 border border-red-800/40 px-2.5 py-0.5 rounded-md">
-                Most Requested
+                  الأكثر طلباً
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#01</span>
               </div>
@@ -500,7 +413,7 @@ export default function WheelsSkinsApp() {
                 كسوة الطارة والميكس
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                (سادة • منقط •  كاربون • فورجيد )
+                (سادة • منقط • ألياف كاربون • فورجيد ميتاليك)
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -528,7 +441,7 @@ export default function WheelsSkinsApp() {
                 ألكنتارا إيطالي فاخر
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-               الكنتارا ملمس عازل للحرارة والعرق    
+                ملمس مخملي عازل للحرارة والعرق مستوحى من حلبات السباق
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -547,7 +460,7 @@ export default function WheelsSkinsApp() {
             <div>
               <div className="flex justify-between items-center mb-3">
                 <span className="text-[11px] font-black text-zinc-400 uppercase tracking-wider bg-zinc-800/50 border border-zinc-700/50 px-2.5 py-0.5 rounded-md">
-                  A complementary touch
+                  لمسة مكملة
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#03</span>
               </div>
@@ -555,7 +468,7 @@ export default function WheelsSkinsApp() {
                 مقبض الفتيس
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                تفصيل جلدي مخصص مع خياطة يدوي متطابقة مع  الطارة
+                تفصيل جلدي مخصص مع خياطة يد متطابقة مع لون الطارة
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -575,7 +488,7 @@ export default function WheelsSkinsApp() {
             <div>
               <div className="flex justify-between items-center mb-3">
                 <span className="text-[11px] font-black text-zinc-400 uppercase tracking-wider bg-zinc-800/50 border border-zinc-700/50 px-2.5 py-0.5 rounded-md">
-                  A complementary touch
+                  تفصيل خاص
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#04</span>
               </div>
@@ -583,7 +496,7 @@ export default function WheelsSkinsApp() {
                 كسوة الهاند بريك
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                إحكام شد الجلد لمنع أي فراغات وإعطاء المظهر الأصلي 
+                إحكام شد الجلد لمنع أي فراغات وإعطاء المظهر الأصلي للوكالة
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -605,7 +518,7 @@ export default function WheelsSkinsApp() {
       {/* 4. Configurator Section */}
       <section id="configurator" className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">Design your luxury kite and see the add-ons instantly</h2>
+          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">صمّم طارتك الفاخرة وشاهد الإضافات فوراً</h2>
           <p className="text-zinc-400 text-sm sm:text-base">اختر الطارة ثم حدد مقبض الفتيس أو الهاند بريك وسيظهر شكل كل قطعة فوراً</p>
         </div>
 
@@ -844,7 +757,7 @@ export default function WheelsSkinsApp() {
       {/* 5. Branches Section */}
       <section id="branches" className="py-16 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">Our branches and live location  </h2>
+          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">فروعنا واللوكيشن المباشر</h2>
           <p className="text-zinc-400 text-sm">اضغط على أي فرع لفتح موقعه المباشر على Google Maps</p>
         </div>
 
@@ -883,7 +796,7 @@ export default function WheelsSkinsApp() {
 
       {/* 6. Booking Section */}
       <section id="booking" className="py-16 px-6 max-w-3xl mx-auto border-t border-zinc-900 text-center">
-        <h2 className="text-2xl sm:text-3xl font-black mb-3">  Book your appointment now</h2>
+        <h2 className="text-2xl sm:text-3xl font-black mb-3">احجز موعدك الآن</h2>
         <p className="text-zinc-400 text-sm mb-8">اختر الفرع، وحدد الميعاد المناسب وسيتم نقلك مباشرة لتأكيد حجزك عبر واتساب</p>
 
         <form className="space-y-6 text-right bg-zinc-950 p-6 sm:p-8 rounded-2xl border border-zinc-800" onSubmit={handleBookingSubmit}>
