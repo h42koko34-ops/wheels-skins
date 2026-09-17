@@ -305,20 +305,7 @@ export default function WheelsSkinsApp() {
           <p className="text-zinc-300/60 text-xs sm:text-sm mb-8 px-4 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/5 font-light">
            wellcome to wheels skins, the best place to customize your car's steering wheel with high-quality materials and craftsmanship.
           </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <a 
-              href="#pricing" 
-              className="bg-[#E3211C] hover:bg-red-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-[0_0_30px_rgba(227,33,28,0.5)] transition transform hover:scale-105"
-            >
-              استكشف الأسعار والخامات
-            </a>
-            <a 
-              href="#configurator" 
-              className="bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-zinc-200 font-bold px-8 py-3.5 rounded-xl backdrop-blur-md transition transform hover:scale-105"
-            >
-              صمّم طارتك الآن
-            </a>
-          </div>
+         
         </div>
       </section>
 
