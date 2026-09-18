@@ -366,30 +366,30 @@ export default function WheelsSkinsApp() {
           loop
           muted
           playsInline
+          preload="auto"
           poster={heroBg}
-          className="absolute inset-0 w-full h-full object-cover z-0"
+          className="absolute inset-0 w-full h-full object-cover brightness-105 contrast-105"
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
 
-        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-[#0B0B0B] z-10" />
-
+        <div className="absolute inset-0 bg-black/30 pointer-events-none" />
         <div className="relative z-20 max-w-4xl mx-auto px-4 flex flex-col items-center">
         <div 
   className="relative z-10 text-center select-none"
   style={{ perspective: '1000px' }}
 >
-  <h1 
-    className="text-5xl sm:text-7xl md:text-8xl font-black tracking-wider transition-transform duration-75 ease-out"
-    style={{
-      transform: `translate3d(0, ${heroScroll * 0.4}px, ${heroScroll * 0.2}px) rotateX(${Math.min(heroScroll * 0.04, 15)}deg) scale(${Math.max(1 - heroScroll * 0.0008, 0.85)})`,
-      opacity: Math.max(1 - heroScroll / 450, 0),
-      textShadow: '0 15px 30px rgba(0,0,0,0.8), 0 0 25px rgba(227,49,28,0.3)'
-    }}
-  >
-    <span className="text-white">Wheels </span>
-    <span className="text-[#E3211C]">Skins</span>
-  </h1>
+ <h1 
+  className="text-5xl sm:text-7xl md:text-8xl font-black tracking-wider transition-transform duration-75 ease-out opacity-85 hover:opacity-100"
+  style={{
+    transform: `translate3d(0, ${heroScroll * 0.4}px, ${heroScroll * 0.2}px) rotateX(${Math.min(heroScroll * 0.04, 15)}deg) scale(${Math.max(1 - heroScroll * 0.0008, 0.85)})`,
+    opacity: Math.max((1 - heroScroll / 450) * 0.85, 0),
+    textShadow: '0 10px 25px rgba(0,0,0,0.6), 0 0 20px rgba(227,49,28,0.25)'
+  }}
+>
+  <span className="text-white/80">Wheels </span>
+<span className="text-[#E3211C]/85">Skins</span>
+</h1>
 </div>
          
         </div>
