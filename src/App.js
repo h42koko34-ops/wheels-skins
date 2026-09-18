@@ -144,6 +144,15 @@ const Card3D = ({ children, className = "", delay = 0 }) => {
   );
 }; 
 export default function WheelsSkinsApp() {
+  const [heroScroll, setHeroScroll] = React.useState(0);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setHeroScroll(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   const wheelOptions = [
     { id: 'plain', name: 'طارة: جلد سادة', price: 400, priceText: '400 ج.م', image: wheelPlain },
     { id: 'dotted', name: 'طارة: جلد منقط', price: 400, priceText: '400 ج.م', image: wheelDotted },
@@ -366,15 +375,22 @@ export default function WheelsSkinsApp() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-[#0B0B0B] z-10" />
 
         <div className="relative z-20 max-w-4xl mx-auto px-4 flex flex-col items-center">
-          <span className="text-[#E3211C] font-bold tracking-widest text-xs sm:text-sm uppercase mb-4 px-4 py-1.5 bg-black/60 rounded-full border border-red-500/30 backdrop-blur-md">
-           ♥ wellcome to ♥
-          </span>
-          <h1 className="text-4xl sm:text-7xl font-black text-white mb-4 tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
-            Wheels <span className="text-[#E3211C]">Skins</span>
-          </h1>
-          <p className="text-zinc-300/60 text-xs sm:text-sm mb-8 px-4 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/5 font-light">
-           the best place to customize your car's steering wheel with high-quality materials and craftsmanship.
-          </p>
+        <div 
+  className="relative z-10 text-center select-none"
+  style={{ perspective: '1000px' }}
+>
+  <h1 
+    className="text-5xl sm:text-7xl md:text-8xl font-black tracking-wider transition-transform duration-75 ease-out"
+    style={{
+      transform: `translate3d(0, ${heroScroll * 0.4}px, ${heroScroll * 0.2}px) rotateX(${Math.min(heroScroll * 0.04, 15)}deg) scale(${Math.max(1 - heroScroll * 0.0008, 0.85)})`,
+      opacity: Math.max(1 - heroScroll / 450, 0),
+      textShadow: '0 15px 30px rgba(0,0,0,0.8), 0 0 25px rgba(227,49,28,0.3)'
+    }}
+  >
+    <span className="text-white">Wheels </span>
+    <span className="text-[#E3211C]">Skins</span>
+  </h1>
+</div>
          
         </div>
       </section>
