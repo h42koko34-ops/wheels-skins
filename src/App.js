@@ -306,11 +306,11 @@ export default function WheelsSkinsApp() {
         </div>
 
         <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-300">
-          <a href="#hero" className="text-[#E3211C] font-bold transition">الرئيسية</a>
-          <a href="#pricing" className="hover:text-white transition">الخامات والأسعار</a>
-          <a href="#configurator" className="hover:text-white transition">صمّم طارتك</a>
-          <a href="#branches" className="hover:text-white transition">فروعنا واللوكيشن</a>
-          <a href="#booking" className="hover:text-white transition">احجز موعدك</a>
+          <a href="#hero" className="text-[#E3211C] font-bold transition">Home</a>
+          <a href="#pricing" className="hover:text-white transition">Materials and Prices</a>
+          <a href="#configurator" className="hover:text-white transition">Configure Your Wheel</a>
+          <a href="#branches" className="hover:text-white transition">Our Branches and Location</a>
+          <a href="#booking" className="hover:text-white transition">Book Your Appointment</a>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
@@ -354,7 +354,7 @@ export default function WheelsSkinsApp() {
             href="#booking" 
             className="bg-[#E3211C] hover:bg-red-700 text-white px-3 sm:px-4 py-2 rounded font-bold text-xs sm:text-sm transition flex items-center gap-1.5 mr-1"
           >
-            <Calendar className="w-3.5 h-3.5" />احجز الآن
+            <Calendar className="w-3.5 h-3.5" />Book now ♥
           </a>
         </div>
       </nav>
@@ -408,10 +408,9 @@ export default function WheelsSkinsApp() {
             </span>
           </div>
           <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
-            خامات فاخرة .. دقة استثنائية
-          </h2>
+        Premium materials... exceptional precision.          </h2>
           <p className="text-zinc-400 text-sm sm:text-base mt-4 max-w-2xl mx-auto font-light leading-relaxed">
-            تفصيل يدوي بدقة المليمتر يجمع بين متانة الجلد الرياضي وملمس الراحة الفائق
+            تفصيل يدوي بدقة المليمتر يجمع بين متانة الجلد  وملمس الطاره المريح  
           </p>
         </div>
 
@@ -421,7 +420,7 @@ export default function WheelsSkinsApp() {
             <div>
               <div className="flex justify-between items-center mb-3">
                 <span className="text-[11px] font-black text-red-500 uppercase tracking-wider bg-red-950/40 border border-red-800/40 px-2.5 py-0.5 rounded-md">
-                  الأكثر طلباً
+               Most Popular
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#01</span>
               </div>
@@ -429,7 +428,7 @@ export default function WheelsSkinsApp() {
                 كسوة الطارة والميكس
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                (سادة • منقط • ألياف كاربون • فورجيد ميتاليك)
+                (سادة • منقط •  كاربون • فورجيد )
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -454,10 +453,10 @@ export default function WheelsSkinsApp() {
                 <span className="text-xs text-zinc-500 font-mono">#02</span>
               </div>
               <h3 className="text-xl font-black text-white group-hover:text-amber-400 transition-colors">
-                ألكنتارا إيطالي فاخر
+                ألكنتارا الماني فاخر
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                ملمس مخملي عازل للحرارة والعرق مستوحى من حلبات السباق
+                ملمس  عازل للحرارة والعرق مع إحكام شد الجلد لمنع أي فراغات   
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -468,7 +467,7 @@ export default function WheelsSkinsApp() {
 
             <div className="pt-4 border-t border-zinc-800/80 text-xs text-amber-400 font-bold flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>خامة طبيعية ناعمة (بدون ضمان)</span>
+              <span>خامة صناعيه ناعمة (بدون ضمان)</span>
             </div>
           </Card3D>
 
@@ -476,7 +475,7 @@ export default function WheelsSkinsApp() {
             <div>
               <div className="flex justify-between items-center mb-3">
                 <span className="text-[11px] font-black text-zinc-400 uppercase tracking-wider bg-zinc-800/50 border border-zinc-700/50 px-2.5 py-0.5 rounded-md">
-                  لمسة مكملة
+                complementary touch
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#03</span>
               </div>
@@ -484,7 +483,7 @@ export default function WheelsSkinsApp() {
                 مقبض الفتيس
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                تفصيل جلدي مخصص مع خياطة يد متطابقة مع لون الطارة
+                تفصيل جلدي مخصص مع خياطة يدوي متطابقة مع  الطارة
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -504,7 +503,7 @@ export default function WheelsSkinsApp() {
             <div>
               <div className="flex justify-between items-center mb-3">
                 <span className="text-[11px] font-black text-zinc-400 uppercase tracking-wider bg-zinc-800/50 border border-zinc-700/50 px-2.5 py-0.5 rounded-md">
-                  تفصيل خاص
+                   complementary touch
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#04</span>
               </div>
@@ -512,7 +511,7 @@ export default function WheelsSkinsApp() {
                 كسوة الهاند بريك
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                إحكام شد الجلد لمنع أي فراغات وإعطاء المظهر الأصلي للوكالة
+                إحكام شد الجلد لمنع أي فراغات وإعطاء مظهر لائق
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -534,7 +533,7 @@ export default function WheelsSkinsApp() {
       {/* 4. Configurator Section */}
       <section id="configurator" className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">صمّم طارتك الفاخرة وشاهد الإضافات فوراً</h2>
+          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">Design your luxury cake and see the add-ons instantly.     </h2>
           <p className="text-zinc-400 text-sm sm:text-base">اختر الطارة ثم حدد مقبض الفتيس أو الهاند بريك وسيظهر شكل كل قطعة فوراً</p>
         </div>
 
@@ -773,8 +772,8 @@ export default function WheelsSkinsApp() {
       {/* 5. Branches Section */}
       <section id="branches" className="py-16 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">فروعنا واللوكيشن المباشر</h2>
-          <p className="text-zinc-400 text-sm">اضغط على أي فرع لفتح موقعه المباشر على Google Maps</p>
+          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">Our Branches and Live Location</h2>
+          <p className="text-zinc-400 text-sm">Click on any branch to open its live location on Google Maps</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -812,8 +811,8 @@ export default function WheelsSkinsApp() {
 
       {/* 6. Booking Section */}
       <section id="booking" className="py-16 px-6 max-w-3xl mx-auto border-t border-zinc-900 text-center">
-        <h2 className="text-2xl sm:text-3xl font-black mb-3">احجز موعدك الآن</h2>
-        <p className="text-zinc-400 text-sm mb-8">اختر الفرع، وحدد الميعاد المناسب وسيتم نقلك مباشرة لتأكيد حجزك عبر واتساب</p>
+        <h2 className="text-2xl sm:text-3xl font-black mb-3">Book Your Appointment Now</h2>
+        <p className="text-zinc-400 text-sm mb-8">Choose a branch, select an appropriate time, and you will be redirected immediately to confirm your booking via WhatsApp</p>
 
         <form className="space-y-6 text-right bg-zinc-950 p-6 sm:p-8 rounded-2xl border border-zinc-800" onSubmit={handleBookingSubmit}>
           
