@@ -439,66 +439,42 @@ export default function WheelsSkinsApp() {
         </div>
       </section>
 
-      {/* 3. شريط الصور المتحرك اللانهائي الحقيقي بدون أي فراغ نهائياً */}
-      <div className="relative w-full overflow-hidden bg-black/60 py-6 border-y border-zinc-900 select-none">
+      {/* 3. شريط الصور المتحرك اللانهائي الحقيقي - حل مشكلة الـ RTL والفراغ */}
+      <div className="relative w-full overflow-hidden bg-black/60 py-6 border-y border-zinc-900 select-none" dir="ltr">
         <style dangerouslySetInnerHTML={{__html: `
-          @keyframes infiniteScroll {
-            from { transform: translateX(0); }
-            to { transform: translateX(-100%); }
+          @keyframes scrollSeamless {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
           }
-          .marquee-track {
+          .animate-infinite-marquee {
             display: flex;
             width: max-content;
-            animation: infiniteScroll 45s linear infinite;
+            animation: scrollSeamless 35s linear infinite;
           }
-          .marquee-track:hover {
+          .animate-infinite-marquee:hover {
             animation-play-state: paused;
           }
         `}} />
         
-        {/* حاويتان متطابقتان تتحركان معاً لضمان عدم وجود فراغ أبداً */}
-        <div className="flex w-max">
-          {/* المجموعة الأولى */}
-          <div className="marquee-track flex items-center gap-5 pr-5">
-            {showcaseImages.map((imgSrc, idx) => (
-              <div 
-                key={`track1-${idx}`} 
-                className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex-shrink-0 flex items-center justify-center p-2.5 shadow-lg hover:border-[#E3211C] hover:scale-105 transition duration-300 cursor-pointer"
-                onClick={() => setModalMedia({ src: imgSrc, title: `معاينة لقطة عمل #${idx + 1}`, price: 'جودة 4K' })}
-              >
-                <img 
-                  src={imgSrc} 
-                  alt="Showcase" 
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = wheelPlain;
-                  }}
-                  className="w-full h-full object-cover rounded-xl filter drop-shadow" 
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* المجموعة الثانية المتطابقة لتكمل المسار فوراً دون ثانية فراغ */}
-          <div className="marquee-track flex items-center gap-5 pr-5" aria-hidden="true">
-            {showcaseImages.map((imgSrc, idx) => (
-              <div 
-                key={`track2-${idx}`} 
-                className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex-shrink-0 flex items-center justify-center p-2.5 shadow-lg hover:border-[#E3211C] hover:scale-105 transition duration-300 cursor-pointer"
-                onClick={() => setModalMedia({ src: imgSrc, title: `معاينة لقطة عمل #${idx + 1}`, price: 'جودة 4K' })}
-              >
-                <img 
-                  src={imgSrc} 
-                  alt="Showcase" 
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = wheelPlain;
-                  }}
-                  className="w-full h-full object-cover rounded-xl filter drop-shadow" 
-                />
-              </div>
-            ))}
-          </div>
+        <div className="animate-infinite-marquee flex items-center gap-5">
+          {/* تكرار المصفوفة مرتين متتاليتين داخل نفس الـ flex للحفاظ على الحلقة دون انقطاع */}
+          {[...showcaseImages, ...showcaseImages].map((imgSrc, idx) => (
+            <div 
+              key={idx} 
+              className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex-shrink-0 flex items-center justify-center p-2.5 shadow-lg hover:border-[#E3211C] hover:scale-105 transition duration-300 cursor-pointer"
+              onClick={() => setModalMedia({ src: imgSrc, title: `معاينة لقطة عمل #${(idx % 20) + 1}`, price: 'جودة 4K' })}
+            >
+              <img 
+                src={imgSrc} 
+                alt="Showcase" 
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = wheelPlain;
+                }}
+                className="w-full h-full object-cover rounded-xl filter drop-shadow pointer-events-none" 
+              />
+            </div>
+          ))}
         </div>
       </div>
 
