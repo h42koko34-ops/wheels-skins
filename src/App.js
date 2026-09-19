@@ -164,19 +164,19 @@ export default function WheelsSkinsApp() {
 
   // قائمة عينات خامات وألوان الجلد لسلايدر الـ 3D Coverflow مع المسارات المباشرة من public/textures
   const leatherTextures = [
-    { title: 'جلد سادة ألماني', desc: 'ملمس ناعم كلاسيكي مقاوم للتآكل', image: `${publicUrl}/textures/plain.jpg`, fallback: wheelPlain, colorHex: '#18181B' },
-    { title: 'جلد منقط رياضي', desc: 'مسامي يمنع التعرق ويزيد ثبات قبضة اليد', image: `${publicUrl}/textures/dotted.jpg`, fallback: wheelDotted, colorHex: '#27272A' },
+    { title: 'جلد سادة ', desc: 'ملمس ناعم كلاسيكي  ', image: `${publicUrl}/textures/plain.jpg`, fallback: wheelPlain, colorHex: '#18181B' },
+    { title: 'جلد منقط ', desc: 'مسامي يمنع التعرق ويزيد ثبات قبض اليد', image: `${publicUrl}/textures/dotted.jpg`, fallback: wheelDotted, colorHex: '#27272A' },
     { title: 'جلد كاربون فايبر', desc: 'شكل عصري فخم ومقاومة عالية للحرارة', image: `${publicUrl}/textures/carbon.jpg`, fallback: wheelCarbon, colorHex: '#09090B' },
-    { title: 'جلد فورجيد فاخر', desc: 'نمط رخامي عصري يمنح الطارة هوية فريدة', image: `${publicUrl}/textures/forged.jpg`, fallback: wheelForged, colorHex: '#3F3F46' },
-    { title: 'شامواه / ألكنتارا أصلي', desc: 'أعلى درجات الراحة والعزل الحراري', image: `${publicUrl}/textures/alcantara.jpg`, fallback: wheelAlcantara, colorHex: '#52525B' },
-    { title: 'جلد أحمر رياضي', desc: 'طابع رياضي جريء عالي المقاومة', image: `${publicUrl}/textures/red.jpg`, fallback: wheelPlain, colorHex: '#DC2626' },
-    { title: 'جلد أزرق مميز', desc: 'لمسة رياضية أنيقة وثبات عالي للون', image: `${publicUrl}/textures/blue.jpg`, fallback: wheelPlain, colorHex: '#2563EB' },
-    { title: 'جلد أبيض ناصع', desc: 'فخامة ناصعة بمقاومة فائقة للحرارة', image: `${publicUrl}/textures/white.jpg`, fallback: wheelPlain, colorHex: '#F8FAFC' },
-    { title: 'جلد رمادي مودرن', desc: 'لون حيادي عصري يتماشى مع الفرش الحديث', image: `${publicUrl}/textures/gray.jpg`, fallback: wheelPlain, colorHex: '#64748B' },
-    { title: 'جلد بيج ملكي', desc: 'تطابق فخم مع الدواخل والفرش البيج', image: `${publicUrl}/textures/beige.jpg`, fallback: wheelPlain, colorHex: '#D4B996' },
-    { title: 'جلد جملي فاخر', desc: 'درجة الجملي الكلاسيكية الفاخرة للسيارات الفارهة', image: `${publicUrl}/textures/camel.jpg`, fallback: wheelPlain, colorHex: '#C19A6B' },
-    { title: 'جلد كحلي رويال', desc: 'درجة ملكية داكنة فخمة ومريحة للعين', image: `${publicUrl}/textures/navy.jpg`, fallback: wheelPlain, colorHex: '#1E3A8A' },
-    { title: 'جلد بني كلاسيك', desc: 'مظهر جلدي دافئ وفخم للدواخل الكلاسيكية', image: `${publicUrl}/textures/brown.jpg`, fallback: wheelPlain, colorHex: '#78350F' }
+    { title: 'جلد فورجيد ', desc: 'نمط رخامي عصري يمنح الطارة هوية فريدة', image: `${publicUrl}/textures/forged.jpg`, fallback: wheelForged, colorHex: '#3F3F46' },
+    { title: 'شامواه / ألكنتارا ', desc: 'أعلى درجات الراحة والعزل الحراري', image: `${publicUrl}/textures/alcantara.jpg`, fallback: wheelAlcantara, colorHex: '#52525B' },
+    { title: 'جلد أحمر ', desc: 'طابع رياضي جريء عالي المقاومة', image: `${publicUrl}/textures/red.jpg`, fallback: wheelPlain, colorHex: '#DC2626' },
+    { title: 'جلد أزرق ', desc: 'لمسة رياضية أنيقة وثبات عالي للون', image: `${publicUrl}/textures/blue.jpg`, fallback: wheelPlain, colorHex: '#2563EB' },
+    { title: 'جلد أبيض ', desc: 'فخامة ناصعة بمقاومة فائقة للحرارة', image: `${publicUrl}/textures/white.jpg`, fallback: wheelPlain, colorHex: '#F8FAFC' },
+    { title: 'جلد رمادي ', desc: 'لون حيادي عصري يتماشى مع الفرش الحديث', image: `${publicUrl}/textures/gray.jpg`, fallback: wheelPlain, colorHex: '#64748B' },
+    { title: 'جلد بيج ', desc: 'تطابق فخم مع الدواخل والفرش البيج', image: `${publicUrl}/textures/beige.jpg`, fallback: wheelPlain, colorHex: '#D4B996' },
+    { title: 'جلد جملي ', desc: 'درجة الجملي الكلاسيكية الفاخرة للسيارات الفارهة', image: `${publicUrl}/textures/camel.jpg`, fallback: wheelPlain, colorHex: '#C19A6B' },
+    { title: 'جلد كحلي ', desc: 'درجة ملكية داكنة فخمة ومريحة للعين', image: `${publicUrl}/textures/navy.jpg`, fallback: wheelPlain, colorHex: '#1E3A8A' },
+    { title: 'جلد بني ', desc: 'مظهر جلدي دافئ وفخم للدواخل الكلاسيكية', image: `${publicUrl}/textures/brown.jpg`, fallback: wheelPlain, colorHex: '#78350F' }
   ];
 
   const [activeTextureIndex, setActiveTextureIndex] = useState(0);
@@ -1250,7 +1250,7 @@ export default function WheelsSkinsApp() {
                         autoFocus
                       />
                       <Search className="w-3.5 h-3.5 text-zinc-500 absolute right-2.5 top-3" />
-                    </div>
+                    </div>git commit -m "Add 3D leather textures coverflow slider and images"
 
                     <div className="overflow-y-auto space-y-1 pr-1">
                       {currentBrandModels.map((model) => (
