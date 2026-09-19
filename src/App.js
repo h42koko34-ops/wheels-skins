@@ -197,6 +197,7 @@ export default function WheelsSkinsApp() {
     { name: 'لبني', hex: '#38BDF8' },
     { name: 'أصفر', hex: '#EAB308' },
     { name: 'أخضر', hex: '#16A34A' },
+    { name: 'جملي', hex: '#C19A6B' },
     { name: 'رمادي', hex: '#9CA3AF' },
     { name: 'بني', hex: '#78350F' }
   ];
