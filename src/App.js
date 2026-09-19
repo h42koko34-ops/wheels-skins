@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { 
-  Calendar, ChevronLeft, MapPin, AlertTriangle, X, ZoomIn, 
+  Calendar, ChevronLeft, ChevronRight, MapPin, AlertTriangle, X, ZoomIn, 
   Search, Check, ExternalLink, Clock, ShieldCheck, CalendarDays,
   ChevronDown
 } from 'lucide-react';
@@ -133,13 +133,10 @@ const Card3D = ({ children, className = "", delay = 0, glowColor = "rgba(227,33,
       }}
       className={`relative rounded-2xl overflow-hidden will-change-transform transform-gpu active:scale-[0.98] touch-manipulation ${className}`}
     >
-      {/* إضاءة توهج سينمائية علوية ثابتة باستمرار */}
       <div 
         className="pointer-events-none absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[55px] z-10"
         style={{ background: glowColor }}
       />
-
-      {/* طبقة الإضاءة السطحية التفاعلية */}
       <div
         className="pointer-events-none absolute inset-0 transition-opacity duration-300 z-20"
         style={{
@@ -162,6 +159,35 @@ export default function WheelsSkinsApp() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const publicUrl = process.env.PUBLIC_URL || '';
+
+  // قائمة عينات خامات وألوان الجلد لسلايدر الـ 3D Coverflow مع المسارات المباشرة من public/textures
+  const leatherTextures = [
+    { title: 'جلد سادة ألماني', desc: 'ملمس ناعم كلاسيكي مقاوم للتآكل', image: `${publicUrl}/textures/plain.jpg`, fallback: wheelPlain, colorHex: '#18181B' },
+    { title: 'جلد منقط رياضي', desc: 'مسامي يمنع التعرق ويزيد ثبات قبضة اليد', image: `${publicUrl}/textures/dotted.jpg`, fallback: wheelDotted, colorHex: '#27272A' },
+    { title: 'جلد كاربون فايبر', desc: 'شكل عصري فخم ومقاومة عالية للحرارة', image: `${publicUrl}/textures/carbon.jpg`, fallback: wheelCarbon, colorHex: '#09090B' },
+    { title: 'جلد فورجيد فاخر', desc: 'نمط رخامي عصري يمنح الطارة هوية فريدة', image: `${publicUrl}/textures/forged.jpg`, fallback: wheelForged, colorHex: '#3F3F46' },
+    { title: 'شامواه / ألكنتارا أصلي', desc: 'أعلى درجات الراحة والعزل الحراري', image: `${publicUrl}/textures/alcantara.jpg`, fallback: wheelAlcantara, colorHex: '#52525B' },
+    { title: 'جلد أحمر رياضي', desc: 'طابع رياضي جريء عالي المقاومة', image: `${publicUrl}/textures/red.jpg`, fallback: wheelPlain, colorHex: '#DC2626' },
+    { title: 'جلد أزرق مميز', desc: 'لمسة رياضية أنيقة وثبات عالي للون', image: `${publicUrl}/textures/blue.jpg`, fallback: wheelPlain, colorHex: '#2563EB' },
+    { title: 'جلد أبيض ناصع', desc: 'فخامة ناصعة بمقاومة فائقة للحرارة', image: `${publicUrl}/textures/white.jpg`, fallback: wheelPlain, colorHex: '#F8FAFC' },
+    { title: 'جلد رمادي مودرن', desc: 'لون حيادي عصري يتماشى مع الفرش الحديث', image: `${publicUrl}/textures/gray.jpg`, fallback: wheelPlain, colorHex: '#64748B' },
+    { title: 'جلد بيج ملكي', desc: 'تطابق فخم مع الدواخل والفرش البيج', image: `${publicUrl}/textures/beige.jpg`, fallback: wheelPlain, colorHex: '#D4B996' },
+    { title: 'جلد جملي فاخر', desc: 'درجة الجملي الكلاسيكية الفاخرة للسيارات الفارهة', image: `${publicUrl}/textures/camel.jpg`, fallback: wheelPlain, colorHex: '#C19A6B' },
+    { title: 'جلد كحلي رويال', desc: 'درجة ملكية داكنة فخمة ومريحة للعين', image: `${publicUrl}/textures/navy.jpg`, fallback: wheelPlain, colorHex: '#1E3A8A' },
+    { title: 'جلد بني كلاسيك', desc: 'مظهر جلدي دافئ وفخم للدواخل الكلاسيكية', image: `${publicUrl}/textures/brown.jpg`, fallback: wheelPlain, colorHex: '#78350F' }
+  ];
+
+  const [activeTextureIndex, setActiveTextureIndex] = useState(0);
+
+  const handlePrevTexture = () => {
+    setActiveTextureIndex((prev) => (prev === 0 ? leatherTextures.length - 1 : prev - 1));
+  };
+
+  const handleNextTexture = () => {
+    setActiveTextureIndex((prev) => (prev === leatherTextures.length - 1 ? 0 : prev + 1));
+  };
 
   const wheelOptions = [
     { id: 'plain', name: 'طارة: جلد سادة', price: 400, priceText: '400 ج.م', image: wheelPlain },
@@ -193,11 +219,11 @@ export default function WheelsSkinsApp() {
     { name: 'أحمر', hex: '#E3211C' },
     { name: 'أزرق', hex: '#1D4ED8' },
     { name: 'أسود', hex: '#18181B' },
+    { name: 'جملي', hex: '#C19A6B' },
     { name: 'بيج', hex: '#D4B996' },
     { name: 'لبني', hex: '#38BDF8' },
     { name: 'أصفر', hex: '#EAB308' },
     { name: 'أخضر', hex: '#16A34A' },
-    { name: 'جملي', hex: '#C19A6B' },
     { name: 'رمادي', hex: '#9CA3AF' },
     { name: 'بني', hex: '#78350F' }
   ];
@@ -327,11 +353,9 @@ export default function WheelsSkinsApp() {
     });
   };
 
-  // قراءة الصور من مجلد public/gallery بمسار متوافق دائماً
   const showcaseImages = useMemo(() => {
-    const publicUrl = process.env.PUBLIC_URL || '';
     return Array.from({ length: 20 }, (_, i) => `${publicUrl}/gallery/work${i + 1}.jpg`);
-  }, []);
+  }, [publicUrl]);
 
   return (
     <div className="min-h-screen bg-[#0B0B0B] text-white font-['Cairo'] antialiased selection:bg-[#E3211C] selection:text-white" dir="rtl">
@@ -352,9 +376,10 @@ export default function WheelsSkinsApp() {
 
         <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-300">
           <a href="#hero" className="text-[#E3211C] font-bold transition">Home</a>
+          <a href="#textures" className="hover:text-white transition">Leather Textures</a>
           <a href="#pricing" className="hover:text-white transition">Materials and Prices</a>
           <a href="#configurator" className="hover:text-white transition">Configure Your Wheel</a>
-          <a href="#branches" className="hover:text-white transition">Our Branches and Location</a>
+          <a href="#branches" className="hover:text-white transition">Our Branches</a>
           <a href="#booking" className="hover:text-white transition">Book Your Appointment</a>
         </div>
 
@@ -439,7 +464,7 @@ export default function WheelsSkinsApp() {
         </div>
       </section>
 
-      {/* 3. شريط الصور المتحرك اللانهائي الحقيقي - حل مشكلة الـ RTL والفراغ */}
+      {/* 3. شريط الصور المتحرك اللانهائي الحقيقي - بدون أي فراغات */}
       <div className="relative w-full overflow-hidden bg-black/60 py-6 border-y border-zinc-900 select-none" dir="ltr">
         <style dangerouslySetInnerHTML={{__html: `
           @keyframes scrollSeamless {
@@ -457,7 +482,6 @@ export default function WheelsSkinsApp() {
         `}} />
         
         <div className="animate-infinite-marquee flex items-center gap-5">
-          {/* تكرار المصفوفة مرتين متتاليتين داخل نفس الـ flex للحفاظ على الحلقة دون انقطاع */}
           {[...showcaseImages, ...showcaseImages].map((imgSrc, idx) => (
             <div 
               key={idx} 
@@ -477,6 +501,111 @@ export default function WheelsSkinsApp() {
           ))}
         </div>
       </div>
+
+      {/* 3.5 معرض خامات الجلد ثلاثي الأبعاد (Coverflow Slider) مع سهمين للتنقل */}
+      <section id="textures" className="py-14 bg-gradient-to-b from-black via-zinc-950 to-[#0B0B0B] border-b border-zinc-900 overflow-hidden select-none">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs text-zinc-400 mb-3 shadow-inner">
+            <span className="w-2 h-2 rounded-full bg-[#E3211C] animate-pulse" />
+            <span className="font-bold tracking-widest uppercase">LEATHER COLLECTION</span>
+          </div>
+          <h2 className="text-2xl sm:text-4xl font-black text-white">كتالوج خامات وألوان الجلد المتاحة</h2>
+          <p className="text-zinc-400 text-xs sm:text-sm mt-1 max-w-xl mx-auto">
+            تصفح شكل وملمس الجلد الطبيعي والصناعي والرياضي المتاح للتفصيل الفوري
+          </p>
+
+          {/* حاوية الـ 3D Coverflow */}
+          <div className="relative h-[340px] sm:h-[400px] flex items-center justify-center mt-6">
+            {leatherTextures.map((item, index) => {
+              const count = leatherTextures.length;
+              let offset = (index - activeTextureIndex + count) % count;
+              if (offset > count / 2) offset -= count;
+
+              const isCenter = offset === 0;
+              const isAdjacent = Math.abs(offset) === 1;
+              const isVisible = Math.abs(offset) <= 2;
+
+              if (!isVisible) return null;
+
+              return (
+                <div
+                  key={index}
+                  onClick={() => setActiveTextureIndex(index)}
+                  className="absolute cursor-pointer transition-all duration-500 ease-out will-change-transform"
+                  style={{
+                    transform: `translateX(${offset * 140}px) scale(${isCenter ? 1.12 : isAdjacent ? 0.85 : 0.65})`,
+                    zIndex: 25 - Math.abs(offset),
+                    opacity: isCenter ? 1 : isAdjacent ? 0.7 : 0.25,
+                    filter: isCenter ? 'none' : 'blur(1px) brightness(0.6)'
+                  }}
+                >
+                  <div className={`w-44 h-64 sm:w-56 sm:h-80 rounded-2xl p-3.5 flex flex-col items-center justify-between border-2 transition-all duration-300 ${
+                    isCenter 
+                      ? 'bg-zinc-900/95 border-[#E3211C] shadow-[0_0_40px_rgba(227,33,28,0.35)] ring-1 ring-red-500/50' 
+                      : 'bg-zinc-950/80 border-zinc-800 shadow-xl'
+                  }`}>
+                    <div className="w-full h-40 sm:h-52 rounded-xl overflow-hidden bg-black/60 border border-zinc-800/80 flex items-center justify-center p-3 relative group">
+                      <div 
+                        className="w-full h-full rounded-lg flex items-center justify-center relative overflow-hidden"
+                        style={{ backgroundColor: `${item.colorHex}20` }}
+                      >
+                        <img 
+                          src={item.image} 
+                          alt={item.title} 
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = item.fallback;
+                          }}
+                          className="max-w-full max-h-full object-cover rounded-md filter drop-shadow-md transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <div 
+                          className="absolute bottom-2 right-2 w-4 h-4 rounded-full border border-white/40 shadow-sm"
+                          style={{ backgroundColor: item.colorHex }}
+                          title={item.title}
+                        />
+                      </div>
+                    </div>
+                    <div className="text-center w-full py-1">
+                      <h4 className="text-sm sm:text-base font-black text-white truncate">{item.title}</h4>
+                      <p className="text-[10px] sm:text-xs text-zinc-400 truncate mt-0.5">{item.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* أزرار الأسهم التفاعلية للتنقل بين خامات الجلد */}
+          <div className="flex items-center justify-center gap-6 mt-4">
+            <button
+              onClick={handlePrevTexture}
+              title="الخامة السابقة"
+              className="w-11 h-11 rounded-full bg-zinc-900 border border-zinc-700 hover:border-[#E3211C] text-white hover:text-[#E3211C] flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+            
+            <div className="flex items-center gap-1.5 overflow-hidden max-w-xs px-2">
+              {leatherTextures.map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    i === activeTextureIndex ? 'w-6 bg-[#E3211C]' : 'w-1.5 bg-zinc-700'
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={handleNextTexture}
+              title="الخامة التالية"
+              className="w-11 h-11 rounded-full bg-zinc-900 border border-zinc-700 hover:border-[#E3211C] text-white hover:text-[#E3211C] flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* 4. سكشن الأسعار والخامات بإضاءة 4K ثلاثية الأبعاد ثابتة ومستمرة */}
       <section id="pricing" className="relative py-28 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden">
@@ -500,7 +629,6 @@ export default function WheelsSkinsApp() {
 
         <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
 
-          {/* كارت 1: إضاءة حمراء ثابتة متوهجة */}
           <Card3D 
             delay={100} 
             glowColor="rgba(227,33,28,0.35)" 
@@ -518,7 +646,7 @@ export default function WheelsSkinsApp() {
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
                 (سادة • منقط • كاربون • فورجيد)
-              </p>
+                </p>
               
               <div className="flex items-baseline gap-2 mb-6">
                 <span className="text-4xl font-black text-white tracking-tight group-hover:text-[#E3211C] transition-colors">400</span>
@@ -533,7 +661,6 @@ export default function WheelsSkinsApp() {
             </div>
           </Card3D>
 
-          {/* كارت 2: إضاءة ذهبية/كهرمانية ثابتة */}
           <Card3D 
             delay={200} 
             glowColor="rgba(245,158,11,0.35)" 
@@ -565,7 +692,6 @@ export default function WheelsSkinsApp() {
             </div>
           </Card3D>
 
-          {/* كارت 3: إضاءة حمراء ثابتة متوهجة */}
           <Card3D 
             delay={300} 
             glowColor="rgba(227,33,28,0.3)" 
@@ -598,7 +724,6 @@ export default function WheelsSkinsApp() {
             </div>
           </Card3D>
 
-          {/* كارت 4: إضاءة حمراء ثابتة متوهجة */}
           <Card3D 
             delay={400} 
             glowColor="rgba(227,33,28,0.3)" 
@@ -770,7 +895,7 @@ export default function WheelsSkinsApp() {
                 </span>
               </div>
               
-              <div className="grid grid-cols-5 sm:grid-cols-9 gap-2">
+              <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
                 {threadColors.map((color) => (
                   <button
                     key={color.name}
@@ -1214,7 +1339,7 @@ export default function WheelsSkinsApp() {
         </form>
       </section>
 
-      {/* 8. زر عائم دائري في منتصف الشاشة من الأسفل للنزول التدريجي جزء بجزء */}
+      {/* 8. زر عائم دائري في منتصف الشاشة من الأسفل للنزول التدريجي */}
       <button 
         onClick={scrollStepDown}
         title="انزل خطوة لأسفل"
