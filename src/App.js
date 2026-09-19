@@ -170,7 +170,6 @@ export default function WheelsSkinsApp() {
     { id: 'alcantara_forged', name: 'ميكس: (الكنتارا + فورجيد)', price: 450, priceText: '450 ج.م', image: wheelAlcantaraForged },
     { id: 'forged_plain', name: 'ميكس: (فورجيد + سادة)', price: 400, priceText: '400 ج.م', image: wheelForgedPlain },
     { id: 'forged_dotted', name: 'ميكس: (فورجيد + منقط)', price: 400, priceText: '400 ج.م', image: wheelForgedDotted },
-    // إضافة خانة ألوان اسبيشيال
     { 
       id: 'special_colors', 
       name: 'طارة: ألوان اسبيشيال', 
@@ -197,13 +196,13 @@ export default function WheelsSkinsApp() {
   const [selectedWheel, setSelectedWheel] = useState(wheelOptions[0]);
   const [selectedThread, setSelectedThread] = useState(threadColors[0]);
   
-  // دمج الفتيس في اختيار واحد (true / false)
-  const [selectedGear, setSelectedGear] = useState(false);
+  // الفتيس مثل الهاند بريك تماماً: 'none' أو 'gear'
+  const [selectedGear, setSelectedGear] = useState('none');
   const [selectedHandbrake, setSelectedHandbrake] = useState('none');
 
   const totalPrice = useMemo(() => {
     let sum = selectedWheel.price;
-    if (selectedGear) sum += 250;
+    if (selectedGear === 'gear') sum += 250;
     if (selectedHandbrake === 'handbrake') sum += 150;
     return sum;
   }, [selectedWheel, selectedGear, selectedHandbrake]);
@@ -211,7 +210,6 @@ export default function WheelsSkinsApp() {
   const [modalMedia, setModalMedia] = useState(null);
   const [specialImgIndex, setSpecialImgIndex] = useState(0);
 
-  // تقليب صور الألوان الاسبيشيال تلقائياً عند فتحها في المعاينة
   useEffect(() => {
     let timer;
     if (modalMedia && modalMedia.gallery && modalMedia.gallery.length > 1) {
@@ -291,7 +289,7 @@ export default function WheelsSkinsApp() {
       return;
     }
 
-    const gearText = selectedGear ? 'مقبض فتيس (+250 ج.م)' : 'بدون فتيس';
+    const gearText = selectedGear === 'gear' ? 'مقبض فتيس (+250 ج.م)' : 'بدون فتيس';
     const handbrakeText = selectedHandbrake === 'handbrake' ? 'كسوة هاند بريك (+150 ج.م)' : 'بدون هاند بريك';
 
     const message = `*طلب حجز موعد جديد - WheelsSkins*%0A` +
@@ -314,17 +312,29 @@ export default function WheelsSkinsApp() {
     window.open(`https://wa.me/201202738020?text=${message}`, '_blank');
   };
 
-  const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
+  // سكرول ناعم ينزل جزء بجزء (بمقدار شاشة واحدة 85% من الارتفاع)
+  const scrollStepDown = () => {
+    window.scrollBy({
+      top: window.innerHeight * 0.85,
       behavior: 'smooth'
     });
   };
 
-  const showcaseImages = [
-    wheelPlain, wheelDotted, wheelCarbon, wheelForged,
-    wheelAlcantara, wheelCarbonPlain, gearDotted, handbrakeCover
-  ];
+  // إعداد صور المعرض الـ 20 مع ضمان عدم حدوث كراش إذا كانت الصور غير مضافة بعد
+  const showcaseImages = useMemo(() => {
+    const baseImages = [
+      wheelPlain, wheelDotted, wheelCarbon, wheelForged,
+      wheelAlcantara, wheelCarbonPlain, gearDotted, handbrakeCover
+    ];
+    const generated = Array.from({ length: 20 }, (_, i) => {
+      try {
+        return require(`./work${i + 1}.jpg`);
+      } catch (e) {
+        return baseImages[i % baseImages.length];
+      }
+    });
+    return generated;
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0B0B0B] text-white font-['Cairo'] antialiased selection:bg-[#E3211C] selection:text-white" dir="rtl">
@@ -432,7 +442,7 @@ export default function WheelsSkinsApp() {
         </div>
       </section>
 
-      {/* 3. شريط الصور المتحرك اللانهائي فوق كروت الأسعار (Infinite Marquee) */}
+      {/* 3. شريط الصور المتحرك (Infinite Marquee) لـ 20 صورة */}
       <div className="relative w-full overflow-hidden bg-black/60 py-6 border-y border-zinc-900">
         <style dangerouslySetInnerHTML={{__html: `
           @keyframes marquee {
@@ -441,21 +451,21 @@ export default function WheelsSkinsApp() {
           }
           .animate-marquee {
             display: flex;
-            width: 200%;
-            animation: marquee 25s linear infinite;
+            width: max-content;
+            animation: marquee 35s linear infinite;
           }
           .animate-marquee:hover {
             animation-play-state: paused;
           }
         `}} />
-        <div className="animate-marquee flex items-center gap-6">
-          {[...showcaseImages, ...showcaseImages, ...showcaseImages].map((imgSrc, idx) => (
+        <div className="animate-marquee flex items-center gap-5">
+          {[...showcaseImages, ...showcaseImages].map((imgSrc, idx) => (
             <div 
               key={idx} 
-              className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex-shrink-0 flex items-center justify-center p-3 shadow-lg hover:border-[#E3211C] hover:scale-105 transition duration-300 cursor-pointer"
-              onClick={() => setModalMedia({ src: imgSrc, title: 'معاينة خامة الشغل', price: 'جودة فائقة' })}
+              className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex-shrink-0 flex items-center justify-center p-2.5 shadow-lg hover:border-[#E3211C] hover:scale-105 transition duration-300 cursor-pointer"
+              onClick={() => setModalMedia({ src: imgSrc, title: `معاينة لقطة عمل #${(idx % 20) + 1}`, price: 'جودة 4K' })}
             >
-              <img src={imgSrc} alt="Showcase" className="w-full h-full object-contain filter drop-shadow" />
+              <img src={imgSrc} alt="Showcase" className="w-full h-full object-cover rounded-xl filter drop-shadow" />
             </div>
           ))}
         </div>
@@ -640,9 +650,9 @@ export default function WheelsSkinsApp() {
               </div>
             </div>
 
-            {(selectedGear || selectedHandbrake !== 'none') && (
+            {(selectedGear === 'gear' || selectedHandbrake !== 'none') && (
               <div className="w-full max-w-sm grid grid-cols-2 gap-3 animate-in fade-in duration-300">
-                {selectedGear && (
+                {selectedGear === 'gear' && (
                   <div 
                     onClick={() => setModalMedia({
                       src: gearDotted,
@@ -754,23 +764,33 @@ export default function WheelsSkinsApp() {
                 3. إضافات تفصيل اختياري (تظهر صورها مباشرة عند الاختيار):
               </label>
 
-              {/* مقبض الفتيس - خانة واحدة فقط (زر تفعيل وإلغاء) */}
+              {/* مقبض الفتيس مثل الهاند بريك تماماً: خانة بدون وخانة فتيس */}
               <div>
                 <span className="text-xs text-zinc-400 block mb-1.5 font-semibold">مقبض الفتيس:</span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedGear(!selectedGear)}
-                  className={`w-full py-2.5 px-4 text-xs font-bold rounded-lg border transition-all flex items-center justify-between ${
-                    selectedGear 
-                      ? 'bg-[#E3211C] text-white border-[#E3211C] shadow-md shadow-red-900/40' 
-                      : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-white'
-                  }`}
-                >
-                  <span>فتيس (+250 ج.م)</span>
-                  <span className={`text-[10px] px-2 py-0.5 rounded ${selectedGear ? 'bg-black/30 text-white' : 'bg-zinc-800 text-zinc-400'}`}>
-                    {selectedGear ? 'محدد ✓' : 'اضغط للإضافة'}
-                  </span>
-                </button>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGear('none')}
+                    className={`py-2.5 px-2 text-xs font-bold rounded-lg border transition ${
+                      selectedGear === 'none' 
+                        ? 'bg-zinc-800 text-white border-zinc-600' 
+                        : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:text-white'
+                    }`}
+                  >
+                    بدون فتيس
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGear('gear')}
+                    className={`py-2.5 px-2 text-xs font-bold rounded-lg border transition ${
+                      selectedGear === 'gear' 
+                        ? 'bg-[#E3211C] text-white border-[#E3211C] shadow-md shadow-red-900/40' 
+                        : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:text-white'
+                    }`}
+                  >
+                    فتيس (+250)
+                  </button>
+                </div>
               </div>
 
               <div className="pt-3 border-t border-zinc-800/80">
@@ -1128,7 +1148,7 @@ export default function WheelsSkinsApp() {
                 <span>الطارة: {selectedWheel.name} ({selectedThread.name})</span>
                 <span className="text-white">{selectedWheel.priceText}</span>
               </div>
-              {selectedGear && (
+              {selectedGear === 'gear' && (
                 <div className="flex justify-between text-zinc-400">
                   <span>الفتيس: مقبض فتيس</span>
                   <span>+250 ج.م</span>
@@ -1167,11 +1187,11 @@ export default function WheelsSkinsApp() {
         </form>
       </section>
 
-      {/* 8. زر عائم دائري للنزول السلس لأسفل الصفحة */}
+      {/* 8. زر عائم دائري في منتصف الشاشة من الأسفل للنزول التدريجي جزء بجزء */}
       <button 
-        onClick={scrollToBottom}
-        title="انزل لأسفل الصفحة"
-        className="fixed bottom-6 left-6 z-40 w-12 h-12 rounded-full bg-zinc-900/90 border border-zinc-700 text-white flex items-center justify-center shadow-2xl hover:bg-[#E3211C] hover:border-[#E3211C] transition-all transform hover:scale-110 active:scale-95 group backdrop-blur-sm cursor-pointer"
+        onClick={scrollStepDown}
+        title="انزل خطوة لأسفل"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-12 h-12 rounded-full bg-zinc-900/90 border border-zinc-700 text-white flex items-center justify-center shadow-2xl hover:bg-[#E3211C] hover:border-[#E3211C] transition-all transform hover:scale-110 active:scale-95 group backdrop-blur-sm cursor-pointer"
       >
         <ChevronDown className="w-6 h-6 group-hover:translate-y-0.5 transition-transform animate-bounce" />
       </button>
@@ -1181,7 +1201,7 @@ export default function WheelsSkinsApp() {
         © {new Date().getFullYear()} WheelSkins. جميع الحقوق محفوظة. By Maestro omar fox
       </footer>
 
-      {/* 10. المعاينة المنبثقة الذكية (Modal) - تدعم سلايدر الصور والفيديو والألوان الاسبيشيال */}
+      {/* 10. المعاينة المنبثقة الذكية (Modal) */}
       {modalMedia && (
         <div 
           className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in duration-200"
