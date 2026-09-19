@@ -436,24 +436,24 @@ export default function WheelsSkinsApp() {
         </div>
       </section>
 
-      {/* 3. شريط الصور المتحرك (Infinite Marquee) لـ 20 صورة */}
+      {/* 3. شريط الصور المتحرك (Infinite Marquee) لـ 20 صورة بدون فراغات */}
       <div className="relative w-full overflow-hidden bg-black/60 py-6 border-y border-zinc-900">
         <style dangerouslySetInnerHTML={{__html: `
-          @keyframes marquee {
-            0% { transform: translateX(0%); }
+          @keyframes marqueeInfinite {
+            0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
           }
-          .animate-marquee {
+          .animate-marquee-smooth {
             display: flex;
             width: max-content;
-            animation: marquee 35s linear infinite;
+            animation: marqueeInfinite 40s linear infinite;
           }
-          .animate-marquee:hover {
+          .animate-marquee-smooth:hover {
             animation-play-state: paused;
           }
         `}} />
-        <div className="animate-marquee flex items-center gap-5">
-          {[...showcaseImages, ...showcaseImages].map((imgSrc, idx) => (
+        <div className="animate-marquee-smooth flex items-center gap-5">
+          {[...showcaseImages, ...showcaseImages, ...showcaseImages, ...showcaseImages].map((imgSrc, idx) => (
             <div 
               key={idx} 
               className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex-shrink-0 flex items-center justify-center p-2.5 shadow-lg hover:border-[#E3211C] hover:scale-105 transition duration-300 cursor-pointer"
@@ -515,7 +515,7 @@ export default function WheelsSkinsApp() {
               <div className="flex items-baseline gap-2 mb-6">
                 <span className="text-4xl font-black text-white tracking-tight group-hover:text-[#E3211C] transition-colors">400</span>
                 <span className="text-xs font-bold text-zinc-400">ج.م</span>
-                <span className="text-xs text-zinc-600 line-through mr-2">450 ج.م</span>
+                <span className="text-sm sm:text-base font-bold text-zinc-400 line-through decoration-red-500/80 decoration-2 mr-3">450 ج.م</span>
               </div>
             </div>
 
@@ -580,7 +580,7 @@ export default function WheelsSkinsApp() {
               <div className="flex items-baseline gap-2 mb-6">
                 <span className="text-4xl font-black text-white tracking-tight group-hover:text-[#E3211C] transition-colors">250</span>
                 <span className="text-xs font-bold text-zinc-400">ج.م</span>
-                <span className="text-xs text-zinc-600 line-through mr-2">300 ج.م</span>
+                <span className="text-sm sm:text-base font-bold text-zinc-400 line-through decoration-red-500/80 decoration-2 mr-3">300 ج.م</span>
               </div>
             </div>
 
@@ -613,7 +613,7 @@ export default function WheelsSkinsApp() {
               <div className="flex items-baseline gap-2 mb-6">
                 <span className="text-4xl font-black text-white tracking-tight group-hover:text-[#E3211C] transition-colors">150</span>
                 <span className="text-xs font-bold text-zinc-400">ج.م</span>
-                <span className="text-xs text-zinc-600 line-through mr-2">200 ج.م</span>
+                <span className="text-sm sm:text-base font-bold text-zinc-400 line-through decoration-red-500/80 decoration-2 mr-3">200 ج.م</span>
               </div>
             </div>
 
