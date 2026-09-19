@@ -73,10 +73,10 @@ const TIME_SLOTS = [
   '10:00 م'
 ];
 
-// مكون 3D سينمائي مع انيميشن سكرول ودعم كامل للموبايل والكمبيوتر
-const Card3D = ({ children, className = "", delay = 0 }) => {
+// مكون 3D سينمائي مع إضاءة ثابتة مستمرة وتفاعل ثلاثي الأبعاد
+const Card3D = ({ children, className = "", delay = 0, glowColor = "rgba(227,33,28,0.25)" }) => {
   const [rotate, setRotate] = React.useState({ x: 0, y: 0 });
-  const [glare, setGlare] = React.useState({ x: 50, y: 50, opacity: 0 });
+  const [glare, setGlare] = React.useState({ x: 50, y: 50, opacity: 0.15 });
   const [isVisible, setIsVisible] = React.useState(false);
   const cardRef = React.useRef(null);
 
@@ -110,13 +110,13 @@ const Card3D = ({ children, className = "", delay = 0 }) => {
     setGlare({
       x: (x / rect.width) * 100,
       y: (y / rect.height) * 100,
-      opacity: 0.2,
+      opacity: 0.35,
     });
   };
 
   const handleMouseLeave = () => {
     setRotate({ x: 0, y: 0 });
-    setGlare((prev) => ({ ...prev, opacity: 0 }));
+    setGlare((prev) => ({ ...prev, opacity: 0.15 }));
   };
 
   return (
@@ -133,11 +133,18 @@ const Card3D = ({ children, className = "", delay = 0 }) => {
       }}
       className={`relative rounded-2xl overflow-hidden will-change-transform transform-gpu active:scale-[0.98] touch-manipulation ${className}`}
     >
+      {/* إضاءة توهج سينمائية علوية ثابتة باستمرار */}
+      <div 
+        className="pointer-events-none absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[55px] z-10"
+        style={{ background: glowColor }}
+      />
+
+      {/* طبقة الإضاءة السطحية التفاعلية */}
       <div
-        className="pointer-events-none absolute inset-0 hidden md:block transition-opacity duration-300 z-20"
+        className="pointer-events-none absolute inset-0 transition-opacity duration-300 z-20"
         style={{
           opacity: glare.opacity,
-          background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.35) 0%, transparent 60%)`,
+          background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.3) 0%, transparent 65%)`,
         }}
       />
       {children}
@@ -177,6 +184,7 @@ export default function WheelsSkinsApp() {
       priceText: '500 ج.م', 
       image: wheelCarbon,
       isSpecial: true,
+      videoSrc: '/special-video.mp4',
       gallery: [wheelCarbon, wheelForged, wheelAlcantara]
     },
   ];
@@ -196,7 +204,6 @@ export default function WheelsSkinsApp() {
   const [selectedWheel, setSelectedWheel] = useState(wheelOptions[0]);
   const [selectedThread, setSelectedThread] = useState(threadColors[0]);
   
-  // الفتيس مثل الهاند بريك تماماً: 'none' أو 'gear'
   const [selectedGear, setSelectedGear] = useState('none');
   const [selectedHandbrake, setSelectedHandbrake] = useState('none');
 
@@ -212,7 +219,7 @@ export default function WheelsSkinsApp() {
 
   useEffect(() => {
     let timer;
-    if (modalMedia && modalMedia.gallery && modalMedia.gallery.length > 1) {
+    if (modalMedia && modalMedia.gallery && modalMedia.gallery.length > 1 && !modalMedia.videoSrc) {
       timer = setInterval(() => {
         setSpecialImgIndex((prev) => (prev + 1) % modalMedia.gallery.length);
       }, 1500);
@@ -312,7 +319,6 @@ export default function WheelsSkinsApp() {
     window.open(`https://wa.me/201202738020?text=${message}`, '_blank');
   };
 
-  // سكرول ناعم ينزل جزء بجزء (بمقدار شاشة واحدة 85% من الارتفاع)
   const scrollStepDown = () => {
     window.scrollBy({
       top: window.innerHeight * 0.85,
@@ -320,20 +326,8 @@ export default function WheelsSkinsApp() {
     });
   };
 
-  // إعداد صور المعرض الـ 20 مع ضمان عدم حدوث كراش إذا كانت الصور غير مضافة بعد
   const showcaseImages = useMemo(() => {
-    const baseImages = [
-      wheelPlain, wheelDotted, wheelCarbon, wheelForged,
-      wheelAlcantara, wheelCarbonPlain, gearDotted, handbrakeCover
-    ];
-    const generated = Array.from({ length: 20 }, (_, i) => {
-      try {
-        return require(`./work${i + 1}.jpg`);
-      } catch (e) {
-        return baseImages[i % baseImages.length];
-      }
-    });
-    return generated;
+    return Array.from({ length: 20 }, (_, i) => `/gallery/work${i + 1}.jpg`);
   }, []);
 
   return (
@@ -465,19 +459,24 @@ export default function WheelsSkinsApp() {
               className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex-shrink-0 flex items-center justify-center p-2.5 shadow-lg hover:border-[#E3211C] hover:scale-105 transition duration-300 cursor-pointer"
               onClick={() => setModalMedia({ src: imgSrc, title: `معاينة لقطة عمل #${(idx % 20) + 1}`, price: 'جودة 4K' })}
             >
-              <img src={imgSrc} alt="Showcase" className="w-full h-full object-cover rounded-xl filter drop-shadow" />
+              <img 
+                src={imgSrc} 
+                alt="Showcase" 
+                onError={(e) => { e.target.src = wheelPlain; }}
+                className="w-full h-full object-cover rounded-xl filter drop-shadow" 
+              />
             </div>
           ))}
         </div>
       </div>
 
-      {/* 4. سكشن الأسعار والخامات بتصميم 4K وإضاءة ثلاثية الأبعاد */}
+      {/* 4. سكشن الأسعار والخامات بإضاءة 4K ثلاثية الأبعاد ثابتة ومستمرة */}
       <section id="pricing" className="relative py-28 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#E3211C]/15 blur-[140px] pointer-events-none rounded-full" />
-        <div className="absolute bottom-10 left-10 w-[400px] h-[250px] bg-red-950/20 blur-[120px] pointer-events-none rounded-full" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#E3211C]/20 blur-[140px] pointer-events-none rounded-full" />
+        <div className="absolute bottom-10 left-10 w-[400px] h-[250px] bg-red-950/25 blur-[120px] pointer-events-none rounded-full" />
 
         <div className="relative z-10 text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 backdrop-blur-md mb-4 shadow-[0_0_20px_rgba(227,33,28,0.2)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 backdrop-blur-md mb-4 shadow-[0_0_25px_rgba(227,33,28,0.3)]">
             <span className="w-2 h-2 rounded-full bg-[#E3211C] animate-pulse" />
             <span className="text-xs font-black text-red-400 uppercase tracking-[0.25em]">
               MASTER CRAFTSMANSHIP
@@ -493,10 +492,15 @@ export default function WheelsSkinsApp() {
 
         <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
 
-          <Card3D delay={100} className="bg-gradient-to-b from-zinc-900/95 via-zinc-950/90 to-black border border-zinc-800/90 hover:border-red-500/60 shadow-[0_15px_35px_rgba(0,0,0,0.7)] hover:shadow-[0_20px_50px_rgba(227,33,28,0.25)] p-7 flex flex-col justify-between group">
+          {/* كارت 1: إضاءة حمراء ثابتة متوهجة */}
+          <Card3D 
+            delay={100} 
+            glowColor="rgba(227,33,28,0.35)" 
+            className="bg-gradient-to-b from-zinc-900 via-zinc-950 to-black border border-red-500/40 hover:border-red-500 shadow-[0_0_30px_rgba(227,33,28,0.2)] hover:shadow-[0_0_45px_rgba(227,33,28,0.4)] p-7 flex flex-col justify-between group transition-all duration-300"
+          >
             <div>
               <div className="flex justify-between items-center mb-3">
-                <span className="text-[11px] font-black text-red-500 uppercase tracking-wider bg-red-950/40 border border-red-800/40 px-2.5 py-0.5 rounded-md">
+                <span className="text-[11px] font-black text-red-500 uppercase tracking-wider bg-red-950/60 border border-red-800/60 px-2.5 py-0.5 rounded-md shadow-sm">
                   Most Popular
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#01</span>
@@ -521,10 +525,15 @@ export default function WheelsSkinsApp() {
             </div>
           </Card3D>
 
-          <Card3D delay={200} className="bg-gradient-to-b from-zinc-900/95 via-zinc-950/90 to-black border border-amber-500/40 hover:border-amber-400 shadow-[0_15px_35px_rgba(0,0,0,0.7)] hover:shadow-[0_20px_50px_rgba(245,158,11,0.25)] p-7 flex flex-col justify-between group">
+          {/* كارت 2: إضاءة ذهبية/كهرمانية ثابتة */}
+          <Card3D 
+            delay={200} 
+            glowColor="rgba(245,158,11,0.35)" 
+            className="bg-gradient-to-b from-zinc-900 via-zinc-950 to-black border border-amber-500/50 hover:border-amber-400 shadow-[0_0_30px_rgba(245,158,11,0.2)] hover:shadow-[0_0_45px_rgba(245,158,11,0.4)] p-7 flex flex-col justify-between group transition-all duration-300"
+          >
             <div>
               <div className="flex justify-between items-center mb-3">
-                <span className="text-[11px] font-black text-amber-400 uppercase tracking-wider bg-amber-950/40 border border-amber-800/40 px-2.5 py-0.5 rounded-md">
+                <span className="text-[11px] font-black text-amber-400 uppercase tracking-wider bg-amber-950/60 border border-amber-800/60 px-2.5 py-0.5 rounded-md shadow-sm">
                   SUPERCAR ED.
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#02</span>
@@ -548,10 +557,15 @@ export default function WheelsSkinsApp() {
             </div>
           </Card3D>
 
-          <Card3D delay={300} className="bg-gradient-to-b from-zinc-900/95 via-zinc-950/90 to-black border border-zinc-800/90 hover:border-red-500/60 shadow-[0_15px_35px_rgba(0,0,0,0.7)] hover:shadow-[0_20px_50px_rgba(227,33,28,0.25)] p-7 flex flex-col justify-between group">
+          {/* كارت 3: إضاءة حمراء ثابتة متوهجة */}
+          <Card3D 
+            delay={300} 
+            glowColor="rgba(227,33,28,0.3)" 
+            className="bg-gradient-to-b from-zinc-900 via-zinc-950 to-black border border-red-500/40 hover:border-red-500 shadow-[0_0_30px_rgba(227,33,28,0.2)] hover:shadow-[0_0_45px_rgba(227,33,28,0.4)] p-7 flex flex-col justify-between group transition-all duration-300"
+          >
             <div>
               <div className="flex justify-between items-center mb-3">
-                <span className="text-[11px] font-black text-zinc-400 uppercase tracking-wider bg-zinc-800/50 border border-zinc-700/50 px-2.5 py-0.5 rounded-md">
+                <span className="text-[11px] font-black text-zinc-300 uppercase tracking-wider bg-zinc-800/80 border border-zinc-700 px-2.5 py-0.5 rounded-md shadow-sm">
                   complementary touch
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#03</span>
@@ -576,10 +590,15 @@ export default function WheelsSkinsApp() {
             </div>
           </Card3D>
 
-          <Card3D delay={400} className="bg-gradient-to-b from-zinc-900/95 via-zinc-950/90 to-black border border-zinc-800/90 hover:border-red-500/60 shadow-[0_15px_35px_rgba(0,0,0,0.7)] hover:shadow-[0_20px_50px_rgba(227,33,28,0.25)] p-7 flex flex-col justify-between group">
+          {/* كارت 4: إضاءة حمراء ثابتة متوهجة */}
+          <Card3D 
+            delay={400} 
+            glowColor="rgba(227,33,28,0.3)" 
+            className="bg-gradient-to-b from-zinc-900 via-zinc-950 to-black border border-red-500/40 hover:border-red-500 shadow-[0_0_30px_rgba(227,33,28,0.2)] hover:shadow-[0_0_45px_rgba(227,33,28,0.4)] p-7 flex flex-col justify-between group transition-all duration-300"
+          >
             <div>
               <div className="flex justify-between items-center mb-3">
-                <span className="text-[11px] font-black text-zinc-400 uppercase tracking-wider bg-zinc-800/50 border border-zinc-700/50 px-2.5 py-0.5 rounded-md">
+                <span className="text-[11px] font-black text-zinc-300 uppercase tracking-wider bg-zinc-800/80 border border-zinc-700 px-2.5 py-0.5 rounded-md shadow-sm">
                   complementary touch
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#04</span>
@@ -624,10 +643,11 @@ export default function WheelsSkinsApp() {
                 src: selectedWheel.image, 
                 title: selectedWheel.name, 
                 price: selectedWheel.priceText,
+                videoSrc: selectedWheel.videoSrc,
                 gallery: selectedWheel.gallery,
                 isSpecial: selectedWheel.isSpecial
               })}
-              title="اضغط لتكبير الطارة"
+              title="اضغط لتكبير الطارة أو معاينة الفيديو"
             >
               <img 
                 key={selectedWheel.id}
@@ -764,7 +784,6 @@ export default function WheelsSkinsApp() {
                 3. إضافات تفصيل اختياري (تظهر صورها مباشرة عند الاختيار):
               </label>
 
-              {/* مقبض الفتيس مثل الهاند بريك تماماً: خانة بدون وخانة فتيس */}
               <div>
                 <span className="text-xs text-zinc-400 block mb-1.5 font-semibold">مقبض الفتيس:</span>
                 <div className="grid grid-cols-2 gap-2">
@@ -1225,7 +1244,11 @@ export default function WheelsSkinsApp() {
                 loop 
                 muted 
                 playsInline 
+                controls
                 className="max-w-full max-h-[70vh] rounded-2xl border border-zinc-800 shadow-2xl"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
               />
             ) : modalMedia.isSpecial && modalMedia.gallery ? (
               <div className="relative flex flex-col items-center">
