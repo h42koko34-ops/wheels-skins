@@ -408,9 +408,9 @@ export default function WheelsSkinsApp() {
             </span>
           </div>
           <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
-        Premium materials... exceptional precision.          </h2>
+        Premium Eaterials... Exceptional Quality.          </h2>
           <p className="text-zinc-400 text-sm sm:text-base mt-4 max-w-2xl mx-auto font-light leading-relaxed">
-            تفصيل يدوي بدقة المليمتر يجمع بين متانة الجلد  وملمس الطاره المريح  
+            تفصيل يدوي بدقة  يجمع بين متانة الجلد  وملمس الطاره المريح  
           </p>
         </div>
 
@@ -456,7 +456,7 @@ export default function WheelsSkinsApp() {
                 ألكنتارا الماني فاخر
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                ملمس  عازل للحرارة والعرق مع إحكام شد الجلد لمنع أي فراغات   
+                ملمس  عازل للحرارة والعرق مع إحكام خياطه الجلد لمنع أي فراغات   
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -467,7 +467,7 @@ export default function WheelsSkinsApp() {
 
             <div className="pt-4 border-t border-zinc-800/80 text-xs text-amber-400 font-bold flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>خامة صناعيه ناعمة (بدون ضمان)</span>
+              <span>خامة الكنتارا فاخره </span>
             </div>
           </Card3D>
 
@@ -533,7 +533,7 @@ export default function WheelsSkinsApp() {
       {/* 4. Configurator Section */}
       <section id="configurator" className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">Design your luxury cake and see the add-ons instantly.     </h2>
+          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">Design your luxury cover and see the add-ons instantly.     </h2>
           <p className="text-zinc-400 text-sm sm:text-base">اختر الطارة ثم حدد مقبض الفتيس أو الهاند بريك وسيظهر شكل كل قطعة فوراً</p>
         </div>
 
