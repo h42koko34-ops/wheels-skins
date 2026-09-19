@@ -1,7 +1,8 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { 
   Calendar, ChevronLeft, MapPin, AlertTriangle, X, ZoomIn, 
-  Search, Check, ExternalLink, Clock, ShieldCheck, CalendarDays
+  Search, Check, ExternalLink, Clock, ShieldCheck, CalendarDays,
+  ChevronDown
 } from 'lucide-react';
 
 // استدعاء قاعدة بيانات السيارات من الملف المستقل
@@ -30,7 +31,6 @@ import wheelForgedDotted from './wheel-forged-dotted.png';
 
 // استدعاء صور مقبض الفتيس والهاند بريك
 import gearDotted from './gear-dotted.png';
-import gearPlain from './gear-plain.png';
 import handbrakeCover from './handbrake.png';
 
 // بيانات الفروع مع روابط اللوكيشن الرسمية لخرائط جوجل
@@ -72,6 +72,7 @@ const TIME_SLOTS = [
   '09:00 م', '09:30 م',
   '10:00 م'
 ];
+
 // مكون 3D سينمائي مع انيميشن سكرول ودعم كامل للموبايل والكمبيوتر
 const Card3D = ({ children, className = "", delay = 0 }) => {
   const [rotate, setRotate] = React.useState({ x: 0, y: 0 });
@@ -142,7 +143,8 @@ const Card3D = ({ children, className = "", delay = 0 }) => {
       {children}
     </div>
   );
-}; 
+};
+
 export default function WheelsSkinsApp() {
   const [heroScroll, setHeroScroll] = React.useState(0);
 
@@ -153,6 +155,7 @@ export default function WheelsSkinsApp() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   const wheelOptions = [
     { id: 'plain', name: 'طارة: جلد سادة', price: 400, priceText: '400 ج.م', image: wheelPlain },
     { id: 'dotted', name: 'طارة: جلد منقط', price: 400, priceText: '400 ج.م', image: wheelDotted },
@@ -167,6 +170,16 @@ export default function WheelsSkinsApp() {
     { id: 'alcantara_forged', name: 'ميكس: (الكنتارا + فورجيد)', price: 450, priceText: '450 ج.م', image: wheelAlcantaraForged },
     { id: 'forged_plain', name: 'ميكس: (فورجيد + سادة)', price: 400, priceText: '400 ج.م', image: wheelForgedPlain },
     { id: 'forged_dotted', name: 'ميكس: (فورجيد + منقط)', price: 400, priceText: '400 ج.م', image: wheelForgedDotted },
+    // إضافة خانة ألوان اسبيشيال
+    { 
+      id: 'special_colors', 
+      name: 'طارة: ألوان اسبيشيال', 
+      price: 500, 
+      priceText: '500 ج.م', 
+      image: wheelCarbon,
+      isSpecial: true,
+      gallery: [wheelCarbon, wheelForged, wheelAlcantara]
+    },
   ];
 
   const threadColors = [
@@ -184,17 +197,30 @@ export default function WheelsSkinsApp() {
   const [selectedWheel, setSelectedWheel] = useState(wheelOptions[0]);
   const [selectedThread, setSelectedThread] = useState(threadColors[0]);
   
-  const [selectedGear, setSelectedGear] = useState('none');
+  // دمج الفتيس في اختيار واحد (true / false)
+  const [selectedGear, setSelectedGear] = useState(false);
   const [selectedHandbrake, setSelectedHandbrake] = useState('none');
 
   const totalPrice = useMemo(() => {
     let sum = selectedWheel.price;
-    if (selectedGear === 'dotted' || selectedGear === 'plain') sum += 250;
+    if (selectedGear) sum += 250;
     if (selectedHandbrake === 'handbrake') sum += 150;
     return sum;
   }, [selectedWheel, selectedGear, selectedHandbrake]);
 
-  const [modalImage, setModalImage] = useState(null);
+  const [modalMedia, setModalMedia] = useState(null);
+  const [specialImgIndex, setSpecialImgIndex] = useState(0);
+
+  // تقليب صور الألوان الاسبيشيال تلقائياً عند فتحها في المعاينة
+  useEffect(() => {
+    let timer;
+    if (modalMedia && modalMedia.gallery && modalMedia.gallery.length > 1) {
+      timer = setInterval(() => {
+        setSpecialImgIndex((prev) => (prev + 1) % modalMedia.gallery.length);
+      }, 1500);
+    }
+    return () => clearInterval(timer);
+  }, [modalMedia]);
 
   const dateInputRef = useRef(null);
 
@@ -265,7 +291,7 @@ export default function WheelsSkinsApp() {
       return;
     }
 
-    const gearText = selectedGear === 'dotted' ? 'مقبض فتيس منقط (+250 ج.م)' : (selectedGear === 'plain' ? 'مقبض فتيس سادة (+250 ج.م)' : 'بدون فتيس');
+    const gearText = selectedGear ? 'مقبض فتيس (+250 ج.م)' : 'بدون فتيس';
     const handbrakeText = selectedHandbrake === 'handbrake' ? 'كسوة هاند بريك (+150 ج.م)' : 'بدون هاند بريك';
 
     const message = `*طلب حجز موعد جديد - WheelsSkins*%0A` +
@@ -287,6 +313,18 @@ export default function WheelsSkinsApp() {
 
     window.open(`https://wa.me/201202738020?text=${message}`, '_blank');
   };
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    });
+  };
+
+  const showcaseImages = [
+    wheelPlain, wheelDotted, wheelCarbon, wheelForged,
+    wheelAlcantara, wheelCarbonPlain, gearDotted, handbrakeCover
+  ];
 
   return (
     <div className="min-h-screen bg-[#0B0B0B] text-white font-['Cairo'] antialiased selection:bg-[#E3211C] selection:text-white" dir="rtl">
@@ -375,27 +413,55 @@ export default function WheelsSkinsApp() {
 
         <div className="absolute inset-0 bg-black/30 pointer-events-none" />
         <div className="relative z-20 max-w-4xl mx-auto px-4 flex flex-col items-center">
-        <div 
-  className="relative z-10 text-center select-none"
-  style={{ perspective: '1000px' }}
->
- <h1 
-  className="text-5xl sm:text-7xl md:text-8xl font-black tracking-wider transition-transform duration-75 ease-out opacity-85 hover:opacity-100"
-  style={{
-    transform: `translate3d(0, ${heroScroll * 0.4}px, ${heroScroll * 0.2}px) rotateX(${Math.min(heroScroll * 0.04, 15)}deg) scale(${Math.max(1 - heroScroll * 0.0008, 0.85)})`,
-    opacity: Math.max((1 - heroScroll / 450) * 0.85, 0),
-    textShadow: '0 10px 25px rgba(0,0,0,0.6), 0 0 20px rgba(227,49,28,0.25)'
-  }}
->
-  <span className="text-white/80">Wheels </span>
-<span className="text-[#E3211C]/85">Skins</span>
-</h1>
-</div>
-         
+          <div 
+            className="relative z-10 text-center select-none"
+            style={{ perspective: '1000px' }}
+          >
+            <h1 
+              className="text-5xl sm:text-7xl md:text-8xl font-black tracking-wider transition-transform duration-75 ease-out opacity-85 hover:opacity-100"
+              style={{
+                transform: `translate3d(0, ${heroScroll * 0.4}px, ${heroScroll * 0.2}px) rotateX(${Math.min(heroScroll * 0.04, 15)}deg) scale(${Math.max(1 - heroScroll * 0.0008, 0.85)})`,
+                opacity: Math.max((1 - heroScroll / 450) * 0.85, 0),
+                textShadow: '0 10px 25px rgba(0,0,0,0.6), 0 0 20px rgba(227,49,28,0.25)'
+              }}
+            >
+              <span className="text-white/80">Wheels </span>
+              <span className="text-[#E3211C]/85">Skins</span>
+            </h1>
+          </div>
         </div>
       </section>
 
-      {/* 3. سكشن الأسعار والخامات بتصميم 4K وإضاءة ثلاثية الأبعاد */}
+      {/* 3. شريط الصور المتحرك اللانهائي فوق كروت الأسعار (Infinite Marquee) */}
+      <div className="relative w-full overflow-hidden bg-black/60 py-6 border-y border-zinc-900">
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-marquee {
+            display: flex;
+            width: 200%;
+            animation: marquee 25s linear infinite;
+          }
+          .animate-marquee:hover {
+            animation-play-state: paused;
+          }
+        `}} />
+        <div className="animate-marquee flex items-center gap-6">
+          {[...showcaseImages, ...showcaseImages, ...showcaseImages].map((imgSrc, idx) => (
+            <div 
+              key={idx} 
+              className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex-shrink-0 flex items-center justify-center p-3 shadow-lg hover:border-[#E3211C] hover:scale-105 transition duration-300 cursor-pointer"
+              onClick={() => setModalMedia({ src: imgSrc, title: 'معاينة خامة الشغل', price: 'جودة فائقة' })}
+            >
+              <img src={imgSrc} alt="Showcase" className="w-full h-full object-contain filter drop-shadow" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. سكشن الأسعار والخامات بتصميم 4K وإضاءة ثلاثية الأبعاد */}
       <section id="pricing" className="relative py-28 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#E3211C]/15 blur-[140px] pointer-events-none rounded-full" />
         <div className="absolute bottom-10 left-10 w-[400px] h-[250px] bg-red-950/20 blur-[120px] pointer-events-none rounded-full" />
@@ -408,9 +474,10 @@ export default function WheelsSkinsApp() {
             </span>
           </div>
           <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
-        Premium Eaterials... Exceptional Quality.          </h2>
+            Premium Materials... Exceptional Quality.
+          </h2>
           <p className="text-zinc-400 text-sm sm:text-base mt-4 max-w-2xl mx-auto font-light leading-relaxed">
-            تفصيل يدوي بدقة  يجمع بين متانة الجلد  وملمس الطاره المريح  
+            تفصيل يدوي بدقة يجمع بين متانة الجلد وملمس الطاره المريح
           </p>
         </div>
 
@@ -420,7 +487,7 @@ export default function WheelsSkinsApp() {
             <div>
               <div className="flex justify-between items-center mb-3">
                 <span className="text-[11px] font-black text-red-500 uppercase tracking-wider bg-red-950/40 border border-red-800/40 px-2.5 py-0.5 rounded-md">
-               Most Popular
+                  Most Popular
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#01</span>
               </div>
@@ -428,7 +495,7 @@ export default function WheelsSkinsApp() {
                 كسوة الطارة والميكس
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                (سادة • منقط •  كاربون • فورجيد )
+                (سادة • منقط • كاربون • فورجيد)
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -456,7 +523,7 @@ export default function WheelsSkinsApp() {
                 ألكنتارا الماني فاخر
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                ملمس  عازل للحرارة والعرق مع إحكام خياطه الجلد لمنع أي فراغات   
+                ملمس عازل للحرارة والعرق مع إحكام خياطه الجلد لمنع أي فراغات
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -467,7 +534,7 @@ export default function WheelsSkinsApp() {
 
             <div className="pt-4 border-t border-zinc-800/80 text-xs text-amber-400 font-bold flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>خامة الكنتارا فاخره </span>
+              <span>خامة الكنتارا فاخره</span>
             </div>
           </Card3D>
 
@@ -475,7 +542,7 @@ export default function WheelsSkinsApp() {
             <div>
               <div className="flex justify-between items-center mb-3">
                 <span className="text-[11px] font-black text-zinc-400 uppercase tracking-wider bg-zinc-800/50 border border-zinc-700/50 px-2.5 py-0.5 rounded-md">
-                complementary touch
+                  complementary touch
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#03</span>
               </div>
@@ -483,7 +550,7 @@ export default function WheelsSkinsApp() {
                 مقبض الفتيس
               </h3>
               <p className="text-xs text-zinc-400 mt-2 mb-6 leading-relaxed">
-                تفصيل جلدي مخصص مع خياطة يدوي متطابقة مع  الطارة
+                تفصيل جلدي مخصص مع خياطة يدوي متطابقة مع الطارة
               </p>
               
               <div className="flex items-baseline gap-2 mb-6">
@@ -503,7 +570,7 @@ export default function WheelsSkinsApp() {
             <div>
               <div className="flex justify-between items-center mb-3">
                 <span className="text-[11px] font-black text-zinc-400 uppercase tracking-wider bg-zinc-800/50 border border-zinc-700/50 px-2.5 py-0.5 rounded-md">
-                   complementary touch
+                  complementary touch
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">#04</span>
               </div>
@@ -530,10 +597,10 @@ export default function WheelsSkinsApp() {
         </div>
       </section>
 
-      {/* 4. Configurator Section */}
+      {/* 5. Configurator Section */}
       <section id="configurator" className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">Design your luxury cover and see the add-ons instantly.     </h2>
+          <h2 className="text-2xl sm:text-4xl font-extrabold mb-3">Design your luxury cover and see the add-ons instantly.</h2>
           <p className="text-zinc-400 text-sm sm:text-base">اختر الطارة ثم حدد مقبض الفتيس أو الهاند بريك وسيظهر شكل كل قطعة فوراً</p>
         </div>
 
@@ -543,7 +610,13 @@ export default function WheelsSkinsApp() {
             <div 
               className="relative group w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] rounded-full overflow-hidden border-2 bg-zinc-900/60 flex items-center justify-center p-6 shadow-2xl transition-all duration-300 cursor-pointer"
               style={{ borderColor: selectedThread.hex, boxShadow: `0 0 35px ${selectedThread.hex}33` }}
-              onClick={() => setModalImage({ src: selectedWheel.image, title: selectedWheel.name, price: selectedWheel.priceText })}
+              onClick={() => setModalMedia({ 
+                src: selectedWheel.image, 
+                title: selectedWheel.name, 
+                price: selectedWheel.priceText,
+                gallery: selectedWheel.gallery,
+                isSpecial: selectedWheel.isSpecial
+              })}
               title="اضغط لتكبير الطارة"
             >
               <img 
@@ -567,13 +640,13 @@ export default function WheelsSkinsApp() {
               </div>
             </div>
 
-            {(selectedGear !== 'none' || selectedHandbrake !== 'none') && (
+            {(selectedGear || selectedHandbrake !== 'none') && (
               <div className="w-full max-w-sm grid grid-cols-2 gap-3 animate-in fade-in duration-300">
-                {selectedGear !== 'none' && (
+                {selectedGear && (
                   <div 
-                    onClick={() => setModalImage({
-                      src: selectedGear === 'dotted' ? gearDotted : gearPlain,
-                      title: selectedGear === 'dotted' ? 'مقبض فتيس منقط' : 'مقبض فتيس سادة',
+                    onClick={() => setModalMedia({
+                      src: gearDotted,
+                      title: 'مقبض فتيس تفصيل يدوي',
                       price: '250 ج.م'
                     })}
                     className="bg-zinc-900 border border-zinc-700 hover:border-[#E3211C] p-3 rounded-xl flex flex-col items-center text-center cursor-pointer transition shadow-md group"
@@ -581,21 +654,19 @@ export default function WheelsSkinsApp() {
                     <span className="text-[10px] text-zinc-400 block mb-1">الفتيس المختار:</span>
                     <div className="w-20 h-20 overflow-hidden flex items-center justify-center p-1">
                       <img 
-                        src={selectedGear === 'dotted' ? gearDotted : gearPlain} 
+                        src={gearDotted} 
                         alt="الفتيس" 
                         className="max-w-full max-h-full object-contain filter drop-shadow group-hover:scale-105 transition"
                       />
                     </div>
-                    <span className="text-xs font-bold text-white mt-1">
-                      {selectedGear === 'dotted' ? 'فتيس منقط' : 'فتيس سادة'}
-                    </span>
+                    <span className="text-xs font-bold text-white mt-1">فتيس</span>
                     <span className="text-[10px] text-[#E3211C] font-semibold">250 ج.م (اضغط للتكبير)</span>
                   </div>
                 )}
 
                 {selectedHandbrake === 'handbrake' && (
                   <div 
-                    onClick={() => setModalImage({
+                    onClick={() => setModalMedia({
                       src: handbrakeCover,
                       title: 'كسوة هاند بريك هاند ميد',
                       price: '150 ج.م'
@@ -683,43 +754,23 @@ export default function WheelsSkinsApp() {
                 3. إضافات تفصيل اختياري (تظهر صورها مباشرة عند الاختيار):
               </label>
 
+              {/* مقبض الفتيس - خانة واحدة فقط (زر تفعيل وإلغاء) */}
               <div>
                 <span className="text-xs text-zinc-400 block mb-1.5 font-semibold">مقبض الفتيس:</span>
-                <div className="grid grid-cols-3 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedGear('none')}
-                    className={`py-2.5 px-2 text-xs font-bold rounded-lg border transition ${
-                      selectedGear === 'none' 
-                        ? 'bg-zinc-800 text-white border-zinc-600' 
-                        : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:text-white'
-                    }`}
-                  >
-                    بدون فتيس
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedGear('dotted')}
-                    className={`py-2.5 px-2 text-xs font-bold rounded-lg border transition ${
-                      selectedGear === 'dotted' 
-                        ? 'bg-[#E3211C] text-white border-[#E3211C] shadow-md shadow-red-900/40' 
-                        : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:text-white'
-                    }`}
-                  >
-                    فتيس منقط (+250)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedGear('plain')}
-                    className={`py-2.5 px-2 text-xs font-bold rounded-lg border transition ${
-                      selectedGear === 'plain' 
-                        ? 'bg-[#E3211C] text-white border-[#E3211C] shadow-md shadow-red-900/40' 
-                        : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:text-white'
-                    }`}
-                  >
-                    فتيس سادة (+250)
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedGear(!selectedGear)}
+                  className={`w-full py-2.5 px-4 text-xs font-bold rounded-lg border transition-all flex items-center justify-between ${
+                    selectedGear 
+                      ? 'bg-[#E3211C] text-white border-[#E3211C] shadow-md shadow-red-900/40' 
+                      : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-white'
+                  }`}
+                >
+                  <span>فتيس (+250 ج.م)</span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded ${selectedGear ? 'bg-black/30 text-white' : 'bg-zinc-800 text-zinc-400'}`}>
+                    {selectedGear ? 'محدد ✓' : 'اضغط للإضافة'}
+                  </span>
+                </button>
               </div>
 
               <div className="pt-3 border-t border-zinc-800/80">
@@ -769,7 +820,7 @@ export default function WheelsSkinsApp() {
         </div>
       </section>
 
-      {/* 5. Branches Section */}
+      {/* 6. Branches Section */}
       <section id="branches" className="py-16 px-6 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center mb-12">
           <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">Our Branches and Live Location</h2>
@@ -809,7 +860,7 @@ export default function WheelsSkinsApp() {
         </div>
       </section>
 
-      {/* 6. Booking Section */}
+      {/* 7. Booking Section */}
       <section id="booking" className="py-16 px-6 max-w-3xl mx-auto border-t border-zinc-900 text-center">
         <h2 className="text-2xl sm:text-3xl font-black mb-3">Book Your Appointment Now</h2>
         <p className="text-zinc-400 text-sm mb-8">Choose a branch, select an appropriate time, and you will be redirected immediately to confirm your booking via WhatsApp</p>
@@ -1077,9 +1128,9 @@ export default function WheelsSkinsApp() {
                 <span>الطارة: {selectedWheel.name} ({selectedThread.name})</span>
                 <span className="text-white">{selectedWheel.priceText}</span>
               </div>
-              {selectedGear !== 'none' && (
+              {selectedGear && (
                 <div className="flex justify-between text-zinc-400">
-                  <span>الفتيس: {selectedGear === 'dotted' ? 'مقبض منقط' : 'مقبض سادة'}</span>
+                  <span>الفتيس: مقبض فتيس</span>
                   <span>+250 ج.م</span>
                 </div>
               )}
@@ -1116,20 +1167,29 @@ export default function WheelsSkinsApp() {
         </form>
       </section>
 
-      {/* 7. Footer */}
+      {/* 8. زر عائم دائري للنزول السلس لأسفل الصفحة */}
+      <button 
+        onClick={scrollToBottom}
+        title="انزل لأسفل الصفحة"
+        className="fixed bottom-6 left-6 z-40 w-12 h-12 rounded-full bg-zinc-900/90 border border-zinc-700 text-white flex items-center justify-center shadow-2xl hover:bg-[#E3211C] hover:border-[#E3211C] transition-all transform hover:scale-110 active:scale-95 group backdrop-blur-sm cursor-pointer"
+      >
+        <ChevronDown className="w-6 h-6 group-hover:translate-y-0.5 transition-transform animate-bounce" />
+      </button>
+
+      {/* 9. Footer */}
       <footer className="py-8 border-t border-zinc-900 text-center text-xs text-zinc-500">
         © {new Date().getFullYear()} WheelSkins. جميع الحقوق محفوظة. By Maestro omar fox
       </footer>
 
-      {/* 8. Image Modal Preview */}
-      {modalImage && (
+      {/* 10. المعاينة المنبثقة الذكية (Modal) - تدعم سلايدر الصور والفيديو والألوان الاسبيشيال */}
+      {modalMedia && (
         <div 
           className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in duration-200"
-          onClick={() => setModalImage(null)}
+          onClick={() => setModalMedia(null)}
         >
           <button 
             className="absolute top-6 right-6 text-white/80 hover:text-white bg-zinc-800/80 hover:bg-[#E3211C] p-2.5 rounded-full transition shadow-lg cursor-pointer"
-            onClick={() => setModalImage(null)}
+            onClick={() => setModalMedia(null)}
           >
             <X className="w-6 h-6" />
           </button>
@@ -1138,14 +1198,42 @@ export default function WheelsSkinsApp() {
             className="relative max-w-3xl max-h-[85vh] flex flex-col items-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <img 
-              src={modalImage.src} 
-              alt={modalImage.title} 
-              className="max-w-full max-h-[75vh] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.95)]"
-            />
+            {modalMedia.videoSrc ? (
+              <video 
+                src={modalMedia.videoSrc} 
+                autoPlay 
+                loop 
+                muted 
+                playsInline 
+                className="max-w-full max-h-[70vh] rounded-2xl border border-zinc-800 shadow-2xl"
+              />
+            ) : modalMedia.isSpecial && modalMedia.gallery ? (
+              <div className="relative flex flex-col items-center">
+                <img 
+                  src={modalMedia.gallery[specialImgIndex]} 
+                  alt={modalMedia.title} 
+                  className="max-w-full max-h-[70vh] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.95)] transition-all duration-500"
+                />
+                <div className="flex gap-2 mt-3">
+                  {modalMedia.gallery.map((_, i) => (
+                    <span 
+                      key={i} 
+                      className={`h-2 rounded-full transition-all duration-300 ${i === specialImgIndex ? 'w-6 bg-[#E3211C]' : 'w-2 bg-zinc-700'}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <img 
+                src={modalMedia.src} 
+                alt={modalMedia.title} 
+                className="max-w-full max-h-[75vh] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.95)]"
+              />
+            )}
+
             <div className="mt-4 text-center bg-zinc-950/80 px-6 py-2.5 rounded-full border border-zinc-800">
-              <h3 className="text-base font-bold text-white inline-block ml-3">{modalImage.title}</h3>
-              <span className="text-[#E3211C] font-black text-sm">{modalImage.price}</span>
+              <h3 className="text-base font-bold text-white inline-block ml-3">{modalMedia.title}</h3>
+              <span className="text-[#E3211C] font-black text-sm">{modalMedia.price}</span>
             </div>
           </div>
         </div>
