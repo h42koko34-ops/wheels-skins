@@ -208,7 +208,7 @@ export default function WheelsSkinsApp() {
       name: 'طارة: ألوان اسبيشيال', 
       price: 400, 
       priceText: '400 ج.م', 
-      image: wheelCarbon,
+      image: '/special-cover.png',
       isSpecial: true,
       videoSrc: `${process.env.PUBLIC_URL || ''}/special-video.mp4`,
       gallery: [wheelCarbon, wheelForged, wheelAlcantara]
