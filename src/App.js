@@ -210,7 +210,7 @@ export default function WheelsSkinsApp() {
       priceText: '500 ج.م', 
       image: wheelCarbon,
       isSpecial: true,
-      videoSrc: '/special-video.mp4',
+      videoSrc: 'special-video.mp4',
       gallery: [wheelCarbon, wheelForged, wheelAlcantara]
     },
   ];
