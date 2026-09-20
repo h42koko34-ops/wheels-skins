@@ -206,11 +206,11 @@ export default function WheelsSkinsApp() {
     { 
       id: 'special_colors', 
       name: 'طارة: ألوان اسبيشيال', 
-      price: 500, 
-      priceText: '500 ج.م', 
+      price: 400, 
+      priceText: '400 ج.م', 
       image: wheelCarbon,
       isSpecial: true,
-      videoSrc: 'special-video.mp4',
+      videoSrc: '/special-video.mp4',
       gallery: [wheelCarbon, wheelForged, wheelAlcantara]
     },
   ];
